@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <title>Header fragment</title>
+</head>
+<body>
+<header class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Réservations</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li th:classappend="${module == 'home' ? 'active' : ''}">
+                    <a href="#" th:href="@{/}">Home</a>
+                </li>
+                <li th:classappend="${module == 'artists' ? 'active' : ''}">
+                    <a href="#" th:href="@{/artists}">Artists</a>
+                </li>
+            </ul>
+        </div>
+        <div style="float:right">
+            <p sec:authorize="!isAuthenticated()">Vous n'êtes pas connecté.<br>
+                <a th:href="@{/login}" class="nav-link">Se connecter</a>
+            </p>
+            <div sec:authorize="isAuthenticated()">
+                <p>Bonjour <span sec:authentication="principal.username">Bob</span>!</p>
+                <form th:action="@{/logout}" method="post" class="nav-link">
+                    <button class="unset">Se déconnecter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+</body>
+</html>
