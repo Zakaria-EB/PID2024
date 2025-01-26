@@ -12,4 +12,3 @@ Le membre pourra réserver des places pour une représentation d’un spectacle,
 
 L’administrateur pourra gérer son catalogue à travers un back-office sécurisé. Par exemple, il pourra ajouter, modifier et supprimer un spectacle manuellement, importer/exporter des données au format CSV, mais aussi mettre à jour la liste des spectacles grâce aux nouveautés publiées par un Web service tiers.
 
-À son tour, l’application devra produire d’une part son propre Web service (une API authentifiée avec système d’affiliation), d’autre part un flux RSS (par exemple, la liste des prochaines représentations).
