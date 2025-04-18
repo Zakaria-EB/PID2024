@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
+      layout:decorate="~{layouts/main}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Liste des artistes</title>
+    <!-- Ajout de Bootstrap via CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+</head>
+<body>
+<div class="container my-4">
+
+    <!-- Bloc 1 : Types -->
+    <div>
+        <h1 class="section-title" th:if="${title != null}" th:text="${title}">Liste des types</h1>
+        <div class="section-content">
+            <ul th:if="${types != null && !#lists.isEmpty(types)}">
+                <li th:each="type : ${types}" class="my-2">
+                    <span th:text="${type.type}">Acteur</span>
+                    <a class="btn btn-outline-primary btn-sm ms-2" th:href="@{/types/{id}(id=${type.id})}">View</a>
+                </li>
+            </ul>
+            <p th:if="${types == null || #lists.isEmpty(types)}">Aucun type disponible.</p>
+        </div>
+    </div>
+
+    <!-- Bloc 2 : Localities -->
+    <div>
+        <h1 class="section-title" th:if="${title != null}" th:text="${title}">Liste des localités</h1>
+        <div class="section-content">
+            <ul th:if="${localities != null && !#lists.isEmpty(localities)}">
+                <li th:each="locality : ${localities}" class="my-2">
+                    <span th:text="|${locality.postalCode} ${locality.locality}|">1000 Bruxelles</span>
+                    <a class="btn btn-outline-primary btn-sm ms-2" th:href="@{/localities/{id}(id=${locality.id})}">View</a>
+                </li>
+            </ul>
+            <p th:if="${localities == null || #lists.isEmpty(localities)}">Aucune localité disponible.</p>
+        </div>
+    </div>
+
+    <!-- Bloc 3 : Roles -->
+    <div>
+        <h1 class="section-title" th:if="${title != null}" th:text="${title}">Liste des rôles</h1>
+        <div class="section-content">
+            <ul th:if="${roles != null && !#lists.isEmpty(roles)}">
+                <li th:each="role : ${roles}" class="my-2">
+                    <span th:text="${role.role}">Admin</span>
+                    <a class="btn btn-outline-primary btn-sm ms-2" th:href="@{/roles/{id}(id=${role.id})}">View</a>
+                </li>
+            </ul>
+            <p th:if="${roles == null || #lists.isEmpty(roles)}">Aucun rôle disponible.</p>
+        </div>
+    </div>
+
+    <!-- Liste des Artistes -->
+    <div layout:fragment="content">
+        <h1 class="section-title" th:text="${title}">Liste des artistes</h1>
+
+        <div class="actions">
+            <a class="btn-add" th:href="@{/artists/create}">Add new artist</a>
+        </div>
+
+        <table class="table table-striped table-bordered" th:unless="${#lists.isEmpty(artists)}">
+            <thead>
+            <tr>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th colspan="3">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="artist : ${artists}">
+                <td th:text="${artist.firstname}">Bob</td>
+                <td th:text="${artist.lastname}">Sull</td>
+                <td><a class="btn btn-info btn-sm" th:href="@{/artists/{id}(id=${artist.id})}">View</a></td>
+                <td><a class="btn btn-warning btn-sm" th:href="@{/artists/{id}/edit(id=${artist.id})}">Edit</a></td>
+                <td>
+                    <form th:id="|deleteForm-${artist.id}|"
+                          th:action="@{/artists/{id}(id=${artist.id})}" th:method="delete">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <a href="#" class="btn-delete"
+                           th:onclick="|if(confirm('Confirm delete artist #${artist.id}')) document.getElementById('deleteForm-${artist.id}').submit(); return false;|">Delete</a>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p th:if="${#lists.isEmpty(artists)}">Aucun artiste disponible.</p>
+    </div>
+
+</div>
+
+<!-- Ajout de Bootstrap JS (pour les actions de la navbar et autres éléments) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

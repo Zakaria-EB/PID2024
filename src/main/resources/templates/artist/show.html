@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
+      layout:decorate="~{layouts/main}" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Fiche d’un artiste</title>
+    <!-- Ajout de Bootstrap pour un design moderne -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+<div class="container">
+    <div layout:fragment="content">
+        <h1 th:text="${artist.firstname} +' '+ ${artist.lastname}" class="section-title">Bob Sull</h1>
+
+        <h2 class="section-title">Liste des types</h2>
+        <ul th:unless="${#lists.isEmpty(artist.types)}" class="section-content">
+            <li th:each="type : ${artist.types}" th:text="${type.type}">Type</li>
+        </ul>
+
+        <div class="actions">
+            <a th:href="@{/artists/{id}/edit(id=${artist.id})}" class="btn-add">Edit</a>
+            <form th:id="|deleteForm-${artist.id}|"
+                  th:action="@{/artists/{id}(id=${artist.id})}" th:method="delete" style="display:inline;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <a href="#"
+                   th:onclick="|if(confirm('Confirm delete artist #${artist.id}')) document.getElementById('deleteForm-${artist.id}').submit(); return false;|"
+                   class="btn-delete">Delete</a>
+            </form>
+        </div>
+        <nav><a th:href="@{/artists}">Retour à l'index</a></nav>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Bloc 1 : Type -->
+    <div class="section-content">
+        <h1 th:if="${type != null}" th:text="${#strings.capitalize(type.type)}" class="section-title">Acteur</h1>
+        <nav><a th:href="@{/types}">Retour à l'index</a></nav>
+    </div>
+
+    <!-- Bloc 2 : Locality -->
+    <div class="section-content">
+        <h1 th:if="${locality != null}" th:text="|${locality.postalCode} ${locality.locality}|" class="section-title">1000 Bruxelles</h1>
+
+        <ul th:if="${locality != null && !#lists.isEmpty(locality.locations)}">
+            <li th:each="location : ${locality.locations}" th:text="${location.designation}">Dexia Art center</li>
+        </ul>
+
+        <p th:if="${locality != null && #lists.isEmpty(locality.locations)}">Aucun lieu de spectacle.</p>
+
+        <nav><a th:href="@{/localities}">Retour à l'index</a></nav>
+    </div>
+
+    <!-- Bloc 3 : Role -->
+    <div class="section-content">
+        <h1 th:if="${role != null}" th:text="${#strings.capitalize(role.role)}" class="section-title">Admin</h1>
+        <nav><a th:href="@{/roles}">Retour à l'index</a></nav>
+    </div>
+</div>
+</body>
+</html>

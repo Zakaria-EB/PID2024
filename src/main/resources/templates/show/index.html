@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/main}">
+<head>
+    <title>Liste des spectacles</title>
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+<div class="container my-4">
+    <div layout:fragment="content">
+
+        <!-- TITRE -->
+        <h1 th:if="${excludedTag}" class="mb-3">
+            Spectacles sans le mot-clé : "<strong th:text="${excludedTag}">tag</strong>"
+        </h1>
+        <h1 th:if="${excludedTag == null}" th:text="${title}" class="mb-3">Liste des spectacles</h1>
+
+        <!-- FORMULAIRE DE RECHERCHE -->
+        <form th:action="@{/shows}" method="get" class="mb-4 d-flex gap-2">
+            <input type="text" name="search" class="form-control" placeholder="Rechercher par mot-clé..."
+                   th:value="${search}">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> Rechercher
+            </button>
+        </form>
+
+        <!-- AFFICHAGE DU NOMBRE DE RÉSULTATS -->
+        <p th:if="${search}" class="text-muted">
+            <span th:text="${resultsCount}">0</span> résultat(s) pour "<strong th:text="${search}">mot</strong>"
+        </p>
+
+        <p th:if="${excludedTag}" class="text-muted">
+            <span th:text="${#lists.size(shows)}">0</span> spectacle(s) sans le mot-clé "<strong th:text="${excludedTag}">tag</strong>"
+        </p>
+
+        <!-- LISTE DES SPECTACLES -->
+        <ul th:unless="${#lists.isEmpty(shows)}" class="list-group">
+            <li th:each="show : ${shows}" class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <span th:text="${show.title}" class="fw-bold">Ayiti</span>
+                    <span th:if="${show.bookable}" th:text="${show.price} + ' €'" class="text-success">9.99 €</span><br/>
+
+                    <span th:if="${#lists.size(show.representations)==1}">- 1 représentation</span>
+                    <span th:if="${#lists.size(show.representations)>1}"
+                          th:text="|- ${#lists.size(show.representations)} représentations|">- 2 représentations</span>
+                    <em th:if="${#lists.size(show.representations)==0}">aucune représentation</em>
+                </div>
+
+                <a th:href="@{/shows/{id}(id=${show.id})}" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-eye"></i> Voir
+                </a>
+            </li>
+        </ul>
+
+        <!-- MESSAGE SI AUCUN RÉSULTAT -->
+        <p th:if="${#lists.isEmpty(shows)}" class="text-danger mt-3">Aucun spectacle trouvé.</p>
+
+    </div>
+</div>
+</body>
+</html>
