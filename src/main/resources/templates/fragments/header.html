@@ -22,6 +22,9 @@
                 <li th:classappend="${module == 'representations' ? 'active' : ''}">
                     <a href="#" th:href="@{/representations}">Representations</a>
                 </li>
+                <li th:classappend="${module == 'user' ? 'active' : ''}">
+                    <a href="#" th:href="@{/user}">User</a>
+                </li>
                 <li class="nav-item">
                     <form th:action="@{/logout}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-outline-light btn-sm ms-2">
