@@ -1,13 +1,42 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
+    layout:decorate="~{layouts/main}">
 <head>
     <title>Profil utilisateur</title>
 </head>
 <body>
-    <h1 th:text="${user.firstname} + ' ' + ${user.lastname}">Nom Prénom</h1>
-    <p><strong>Login:</strong> <span th:text="${user.login}">bob</span></p>
-    <p><strong>Email:</strong> <span th:text="${user.email}">bob@email.com</span></p>
-    <p><strong>Langue:</strong> <span th:text="${user.langue}">fr</span></p>
-    <a th:href="@{/users/{id}/edit(id=${user.id})}">Modifier</a>
+<div layout:fragment="content">
+    <h1 th:text="|Profil de ${user.firstname} ${user.lastname}|">Profil</h1>
+
+    <table>
+        <tr>
+            <th>Login :</th>
+            <td th:text="${user.login}">bob</td>
+        </tr>
+        <tr>
+            <th>Email :</th>
+            <td th:text="${user.email}">bob@email.com</td>
+        </tr>
+        <tr>
+            <th>Prénom :</th>
+            <td th:text="${user.firstname}">Bob</td>
+        </tr>
+        <tr>
+            <th>Nom :</th>
+            <td th:text="${user.lastname}">Dupont</td>
+        </tr>
+        <tr>
+            <th>Langue :</th>
+            <td th:text="${user.langue}">fr</td>
+        </tr>
+    </table>
+
+    <div class="actions">
+        <a th:href="@{/users/{id}/edit(id=${user.id})}">Modifier</a>
+        <a th:href="@{/users}">Retour à la liste</a>
+    </div>
+</div>
 </body>
 </html>
