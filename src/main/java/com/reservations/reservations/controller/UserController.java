@@ -10,12 +10,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+@Controller
 public class UserController {
 
     @Autowired
     private UserService service;
 
+    @GetMapping("/users/{id}/edit")
     public String edit(@PathVariable String id, Model model, HttpServletRequest request) {
+
         User user = service.getUser(id);
         model.addAttribute("user", user);
 

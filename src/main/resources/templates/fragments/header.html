@@ -23,7 +23,8 @@
                     <a href="#" th:href="@{/representations}">Representations</a>
                 </li>
                 <li th:classappend="${module == 'user' ? 'active' : ''}">
-                    <a href="#" th:href="@{/user}">User</a>
+<!--                    <a href="#" th:href="@{/user}">User</a>-->
+                    <a th:href="@{/users/1/edit}">Modifier le profil</a>
                 </li>
                 <li class="nav-item">
                     <form th:action="@{/logout}" method="post" class="d-inline">
