@@ -27,16 +27,31 @@ public class UserController {
 
         return "user/edit";
     }
-
+    @PutMapping("/users/{id}/edit")
     public String update(@PathVariable String id, @Valid @ModelAttribute User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "user/edit";
         }
 
-        service.updateUser(id, user);
-        return "redirect:/users/" + id; // redirige vers le profil ou autre page pertinente
+        User existing = service.getUser(id);
+        if (existing == null) {
+            return "redirect:/users";
+        }
+            existing.setLogin(user.getLogin());
+            existing.setFirstname(user.getFirstname());
+            existing.setLastname(user.getLastname());
+            existing.setEmail(user.getEmail());
+            existing.setLangue(user.getLangue());
+
+        service.updateUser(id, existing);
+        return "redirect:/users/" + id;
     }
 
-
+    @GetMapping("/users/{id}")
+    public String showUser(@PathVariable String id, Model model) {
+        User user = service.getUser(id);
+        model.addAttribute("user", user);
+        return "user/show";
+    }
 
 }

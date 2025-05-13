@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profil utilisateur</title>
+</head>
+<body>
+    <h1 th:text="${user.firstname} + ' ' + ${user.lastname}">Nom Prénom</h1>
+    <p><strong>Login:</strong> <span th:text="${user.login}">bob</span></p>
+    <p><strong>Email:</strong> <span th:text="${user.email}">bob@email.com</span></p>
+    <p><strong>Langue:</strong> <span th:text="${user.langue}">fr</span></p>
+    <a th:href="@{/users/{id}/edit(id=${user.id})}">Modifier</a>
+</body>
+</html>
