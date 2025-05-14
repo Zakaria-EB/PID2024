@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <title>Header Fragment</title>
@@ -12,26 +12,33 @@
         </div>
         <nav>
             <ul class="nav">
-
                 <li th:classappend="${module == 'artists' ? 'active' : ''}">
-                    <a href="#" th:href="@{/artists}">Artists</a>
+                    <a th:href="@{/artists}">Artists</a>
                 </li>
                 <li th:classappend="${module == 'shows' ? 'active' : ''}">
-                    <a href="#" th:href="@{/shows}">Shows</a>
+                    <a th:href="@{/shows}">Shows</a>
                 </li>
                 <li th:classappend="${module == 'representations' ? 'active' : ''}">
-                    <a href="#" th:href="@{/representations}">Representations</a>
+                    <a th:href="@{/representations}">Representations</a>
                 </li>
-                <li class="nav-item">
+
+                <!-- Si utilisateur NON connecté -->
+                <li sec:authorize="isAnonymous()">
+                    <a class="btn btn-outline-light btn-sm" th:href="@{/login}">Se connecter</a>
+                </li>
+                <li sec:authorize="isAnonymous()">
+                    <a class="btn btn-outline-light btn-sm ms-2" th:href="@{/register}">S’inscrire</a>
+                </li>
+
+                <!-- Si utilisateur connecté -->
+                <li sec:authorize="isAuthenticated()">
                     <form th:action="@{/logout}" method="post" class="d-inline">
                         <button type="submit" class="btn btn-outline-light btn-sm ms-2">
                             <i class="fas fa-sign-out-alt me-1"></i> Se déconnecter
                         </button>
                     </form>
                 </li>
-
             </ul>
-        </nav>
     </div>
 </header>
 </body>
