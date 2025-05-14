@@ -1,67 +1,414 @@
 <!DOCTYPE html>
-<html lang="fr"
-      xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
-      layout:decorate="~{layouts/main}"
-      xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Accueil – Réservations de spectacles</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Le Plateau Théâtral - Découvrez les meilleurs spectacles et représentations culturelles à Bruxelles">
+    <title>Le Plateau Théâtral | Spectacles et représentations théâtrales</title>
 
-    <!-- Bootstrap + FontAwesome -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #d4af37;
+            --accent-color: #8e44ad;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            color: #212529;
+        }
+
+        h1, h2, h3, h4, h5, .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .hero-header {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+            url('https://i.pinimg.com/736x/ad/cf/b4/adcfb43aa09547811f678ffb9f37c80f.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .show-card {
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .show-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .show-card img {
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .show-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            padding: 0.5rem 1.5rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #7d3c98;
+            border-color: #7d3c98;
+        }
+
+        .btn-outline-primary {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .navbar {
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .search-form .form-control {
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .search-form .btn {
+            border-radius: 0 50px 50px 0;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        footer a {
+            color: var(--light-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        .social-icon {
+            font-size: 1.25rem;
+            margin-right: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .about-section {
+            background-color: rgba(0, 0, 0, 0.85);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero-header {
+                min-height: 40vh;
+            }
+
+            .show-card img {
+                height: 300px;
+            }
+
+            .search-form {
+                margin-top: 1rem;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-<div layout:fragment="content">
+<!-- Navigation corrigée -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <i class="fas fa-theater-masks me-2" style="color: var(--secondary-color);"></i>
+            Le Plateau Théâtral
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <!-- HERO SECTION -->
-    <section class="bg-dark text-light text-center py-5">
-        <div class="container">
-            <h1 class="display-4 fw-bold">Réservez vos spectacles préférés en ligne</h1>
-            <p class="lead mt-3">Découvrez les meilleures représentations culturelles autour de vous</p>
-            <a href="/shows" class="btn btn-primary btn-lg mt-4">
-                <i class="fas fa-ticket-alt"></i> Voir les spectacles
-            </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/shows"><i class="fas fa-masks-theater me-1"></i> Spectacles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/representations"><i class="fas fa-calendar-alt me-1"></i> Représentations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about"><i class="fas fa-info-circle me-1"></i> À propos</a>
+                </li>
+            </ul>
+
+            <!-- Barre de recherche -->
+            <form class="d-flex ms-lg-3 my-2 my-lg-0 search-form" method="GET">
+                <div class="input-group">
+                    <input class="form-control" type="search" placeholder="Rechercher..." name="searchString" th:value="${searchString}">
+                    <input name="sortBy" th:value="${sortBy}" hidden>
+                    <input name="sortOrder" th:value="${sortOrder}" hidden>
+                    <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+
+            <!-- Liens utilisateur -->
+            <ul class="navbar-nav">
+                <li sec:authorize="!isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt me-1"></i> Connexion</a>
+                </li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="/register"><i class="fas fa-user-plus me-1"></i> Inscription</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-1"></i> Mon compte
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i> Profil</a></li>
+                        <li><a class="dropdown-item" href="/my-tickets"><i class="fas fa-ticket-alt me-2"></i> Mes billets</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Déconnexion</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-    </section>
+    </div>
+</nav>
 
-    <!-- FEATURE SECTION -->
-    <section class="py-5 bg-light">
-        <div class="container text-center">
-            <div class="row">
-                <div class="col-md-4">
-                    <i class="fas fa-calendar-day fa-3x text-primary mb-3"></i>
-                    <h4>Programmation complète</h4>
-                    <p>Consultez les dates et horaires des représentations en temps réel.</p>
+<!-- Alert Messages -->
+<div class="container mt-3">
+    <div th:if="${message_success}" class="alert alert-success alert-dismissible fade show">
+        <span th:text="${message_success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${message_danger}" class="alert alert-danger alert-dismissible fade show">
+        <span th:text="${message_danger}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+</div>
+
+<!-- Hero Section -->
+<section class="hero-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-3 fw-bold mb-4">L'art théâtral à son apogée</h1>
+                <p class="lead mb-5">Découvrez des performances exceptionnelles et vivez des émotions uniques</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="/shows" class="btn btn-primary btn-lg px-4">
+                        <i class="fas fa-ticket-alt me-2"></i> Voir les spectacles
+                    </a>
+                    <a href="/representations" class="btn btn-outline-light btn-lg px-4">
+                        <i class="fas fa-calendar-alt me-2"></i> Programme
+                    </a>
                 </div>
-                <div class="col-md-4">
-                    <i class="fas fa-user-friends fa-3x text-success mb-3"></i>
-                    <h4>Artistes talentueux</h4>
-                    <p>Découvrez les artistes qui font vibrer la scène francophone.</p>
-                </div>
-                <div class="col-md-4">
-                    <i class="fas fa-lock fa-3x text-danger mb-3"></i>
-                    <h4>Réservation sécurisée</h4>
-                    <p>Réservez vos places en toute sécurité grâce à notre système fiable.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<main class="container my-5">
+    <!-- Featured Shows -->
+    <section class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">Nos spectacles à l'affiche</h2>
+            <div class="btn-group" role="group">
+                <a class="btn btn-outline-primary" th:href="@{/(sortBy='title', sortOrder='asc', searchString=${searchString})}">
+                    <i class="fas fa-sort-alpha-down me-2"></i> A-Z
+                </a>
+                <a class="btn btn-outline-primary" th:href="@{/(sortBy='title', sortOrder='desc', searchString=${searchString})}">
+                    <i class="fas fa-sort-alpha-down-alt me-2"></i> Z-A
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div th:each="s : ${shows}" class="col-lg-4 col-md-6">
+                <div class="card show-card h-100">
+                    <img th:src="@{${'/images/' + s.posterUrl}}" class="card-img-top" alt="Affiche du spectacle" th:attr="alt=${'Affiche de ' + s.title}">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${s.title}"></h5>
+                        <p class="card-text text-muted" th:text="${s.shortDescription} ?: 'Découvrez ce spectacle unique au Plateau Théâtral'"></p>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <a th:href="@{'/shows/' + ${s.id}}" class="btn btn-primary w-100">
+                            <i class="fas fa-info-circle me-2"></i> Détails et réservation
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA SECTION -->
-    <section class="py-5 text-center">
+    <!-- About Section -->
+    <section class="about-section text-white text-center py-5">
         <div class="container">
-            <h2 class="mb-4">Prêt à vivre une expérience unique ?</h2>
-            <a href="/representations" class="btn btn-outline-dark btn-lg">
-                <i class="fas fa-masks-theater"></i> Explorez les représentations
+            <h2 class="fw-bold mb-4">L'art théâtral</h2>
+            <p class="lead mb-4">L'objectif théâtral est multidimensionnel, visant à divertir, éduquer, émouvoir et inspirer</p>
+            <p>Au Plateau Théâtral, nous nous engageons à présenter des œuvres qui explorent les différentes facettes de l'expérience humaine, tout en repoussant les limites de la créativité artistique. Notre mission est de créer un espace où l'art et le public se rencontrent pour des échanges enrichissants.</p>
+            <a href="/about" class="btn btn-outline-light mt-3">
+                <i class="fas fa-arrow-right me-2"></i> Découvrez notre histoire
             </a>
         </div>
     </section>
 
-</div>
+    <!-- Newsletter CTA -->
+    <section class="bg-light p-5 rounded-3 mb-5">
+        <div class="row align-items-center">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <h3 class="fw-bold mb-2">Restez informé</h3>
+                <p class="mb-0">Abonnez-vous à notre newsletter pour recevoir les dernières actualités et offres spéciales</p>
+            </div>
+            <div class="col-md-6">
+                <form class="row g-2">
+                    <div class="col-8">
+                        <input type="email" class="form-control" placeholder="Votre adresse email">
+                    </div>
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary w-100">S'abonner</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
 
-<!-- JS Bootstrap -->
+<!-- Footer -->
+<footer class="bg-dark text-white">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <h5 class="text-uppercase fw-bold mb-4">
+                    <i class="fas fa-theater-masks me-2" style="color: var(--secondary-color);"></i>
+                    Le Plateau Théâtral
+                </h5>
+                <p>Votre destination privilégiée pour des expériences théâtrales exceptionnelles à Bruxelles depuis 2010.</p>
+                <div class="mt-4">
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4">
+                <h5 class="text-uppercase fw-bold mb-4">Navigation</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="/"><i class="fas fa-chevron-right me-2 small"></i> Accueil</a></li>
+                    <li class="mb-2"><a href="/shows"><i class="fas fa-chevron-right me-2 small"></i> Spectacles</a></li>
+                    <li class="mb-2"><a href="/representations"><i class="fas fa-chevron-right me-2 small"></i> Programme</a></li>
+                    <li class="mb-2"><a href="/about"><i class="fas fa-chevron-right me-2 small"></i> À propos</a></li>
+                    <li class="mb-2"><a href="/contact"><i class="fas fa-chevron-right me-2 small"></i> Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="text-uppercase fw-bold mb-4">Contact</h5>
+                <address>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> Rue du Spectacle 42, 1000 Bruxelles</p>
+                    <p><i class="fas fa-phone me-2"></i> <a href="tel:+3221234567">+32 2 123 45 67</a></p>
+                    <p><i class="fas fa-envelope me-2"></i> <a href="mailto:contact@plateau-theatral.be">contact@plateau-theatral.be</a></p>
+                    <p><i class="fas fa-clock me-2"></i> Ouvert du mardi au dimanche</p>
+                </address>
+            </div>
+
+            <div class="col-lg-3 col-md-4">
+                <h5 class="text-uppercase fw-bold mb-4">Infos pratiques</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="/faq"><i class="fas fa-question-circle me-2"></i> FAQ</a></li>
+                    <li class="mb-2"><a href="/accessibility"><i class="fas fa-wheelchair me-2"></i> Accessibilité</a></li>
+                    <li class="mb-2"><a href="/partners"><i class="fas fa-handshake me-2"></i> Nos partenaires</a></li>
+                    <li class="mb-2"><a href="/jobs"><i class="fas fa-briefcase me-2"></i> Recrutement</a></li>
+                    <li class="mb-2"><a href="/press"><i class="fas fa-newspaper me-2"></i> Espace presse</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                <p class="mb-0 small">&copy; 2025 Le Plateau Théâtral. Tous droits réservés.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <a href="/privacy" class="small me-3">Confidentialité</a>
+                <a href="/terms" class="small me-3">Conditions générales</a>
+                <a href="/cookies" class="small">Préférences cookies</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Animation for cards
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.show-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s ease';
+            });
+        });
+    });
+</script>
 </body>
 </html>
