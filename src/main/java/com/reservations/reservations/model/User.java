@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.*;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
@@ -18,6 +19,7 @@ public class User {
     private String lastname;
     private String email;
     private String langue;
+    @Setter
     private LocalDateTime created_at;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
@@ -31,7 +33,7 @@ public class User {
     )
     private List<Representation> representations = new ArrayList<>();
 
-    protected User() {}
+    public User() {}
 
     public User(String login, String firstname, String lastname) {
         this.login = login;
@@ -99,6 +101,7 @@ public class User {
     public LocalDateTime getCreated_at() {
         return created_at;
     }
+
 
     public User addRole(Role role) {
         if (!this.roles.contains(role)) {
