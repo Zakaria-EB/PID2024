@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -360,6 +361,46 @@
             </div>
         </div>
     </nav>
+<header class="navbar" th:fragment="header">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#" th:href="@{/}">Réservations</a>
+        </div>
+        <nav>
+            <ul class="nav">
+                <li th:classappend="${module == 'artists' ? 'active' : ''}">
+                    <a th:href="@{/artists}">Artists</a>
+                </li>
+                <li th:classappend="${module == 'shows' ? 'active' : ''}">
+                    <a th:href="@{/shows}">Shows</a>
+                </li>
+                <li th:classappend="${module == 'representations' ? 'active' : ''}">
+                    <a th:href="@{/representations}">Representations</a>
+                </li>
+
+                <!-- Si utilisateur NON connecté -->
+                <li sec:authorize="isAnonymous()">
+                    <a class="btn btn-outline-light btn-sm" th:href="@{/login}">Se connecter</a>
+                </li>
+                <li sec:authorize="isAnonymous()">
+                    <a class="btn btn-outline-light btn-sm ms-2" th:href="@{/register}">S’inscrire</a>
+                </li>
+
+                <!-- Si utilisateur connecté -->
+                <li sec:authorize="isAuthenticated()">
+                <li th:classappend="${module == 'user' ? 'active' : ''}">
+<!--                    <a href="#" th:href="@{/user}">User</a>-->
+                    <a th:href="@{/users/1/edit}">Modifier le profil</a>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-light btn-sm ms-2">
+                            <li class="fas fa-sign-out-alt me-1"></i> Se déconnecter
+                        </button>
+                    </form>
+                </li>
+            </ul>
+    </div>
 </header>
 
 <!-- Bootstrap JS Bundle with Popper -->
