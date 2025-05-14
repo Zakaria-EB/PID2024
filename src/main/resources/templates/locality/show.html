@@ -1,26 +1,122 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layouts/main}">
 <head>
-    <title>Fiche d'une localité</title>
-    <!-- Ajout de Bootstrap pour un design moderne -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>Fiche d'une localité | Plateforme Spectacles</title>
+    <meta name="description" content="Détails de la localité et lieux de spectacles associés">
+
+    <!-- CSS Bootstrap avec intégration améliorée -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        .locality-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .locations-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .locations-list li {
+            background-color: #f8f9fa;
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+            border-left: 4px solid #2575fc;
+        }
+
+        .locations-list li:hover {
+            background-color: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .empty-state {
+            background-color: #f8f9fa;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            color: #6c757d;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #0d6efd;
+            transform: translateX(-3px);
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <div layout:fragment="content">
-        <h1 th:text="|${locality.postalCode}  ${locality.locality}|">1000 Bruxelles</h1>
+<div layout:fragment="content" class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- En-tête avec la localité -->
+            <div class="locality-header text-center">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i>
+                    <span th:text="${locality.postalCode}">1000</span>
+                    <span th:text="${locality.locality}">Bruxelles</span>
+                </h1>
+                <p class="lead mb-0">
+                    <span th:text="${#lists.size(locality.locations)}">0</span>
+                    <span th:text="${#lists.size(locality.locations) == 1 ? 'lieu de spectacle' : 'lieux de spectacles'}"></span>
+                </p>
+            </div>
 
-        <ul th:unless="${#lists.isEmpty(locality.locations)}">
-            <li th:each="location : ${locality.locations}"
-                th:text="${location.designation}">Dexia Art center</li>
-        </ul>
+            <!-- Liste des lieux -->
+            <div th:unless="${#lists.isEmpty(locality.locations)}" class="mb-5">
+                <h2 class="h4 mb-4">
+                    <i class="fas fa-landmark me-2 text-primary"></i>
+                    Lieux de spectacles dans cette localité
+                </h2>
 
-        <p th:if="${#lists.isEmpty(locality.locations)}">Aucun lieu de spectacle.</p>
+                <ul class="locations-list">
+                    <li th:each="location : ${locality.locations}">
+                        <a th:href="@{|/locations/${location.id}|}" class="text-decoration-none d-flex justify-content-between align-items-center">
+                            <span th:text="${location.designation}">Dexia Art Center</span>
+                            <i class="fas fa-chevron-right text-muted"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
-        <nav><a th:href="@{/localities}">Retour à l'index</a></nav>
+            <!-- État vide -->
+            <div th:if="${#lists.isEmpty(locality.locations)}" class="empty-state mb-5">
+                <i class="fas fa-theater-masks fa-3x mb-3 text-muted"></i>
+                <h3 class="h4">Aucun lieu de spectacle enregistré</h3>
+                <p class="mb-0">Nous n'avons trouvé aucun lieu de spectacle dans cette localité.</p>
+            </div>
+
+            <!-- Navigation -->
+            <nav aria-label="Navigation secondaire">
+                <a th:href="@{/localities}" class="back-link text-decoration-none">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Retour à la liste des localités
+                </a>
+            </nav>
+        </div>
     </div>
 </div>
+
+<!-- Scripts Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
 </body>
 </html>
