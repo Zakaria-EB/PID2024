@@ -3,18 +3,26 @@ package com.reservations.reservations.controller;
 import java.util.List;
 
 import com.reservations.reservations.model.Artist;
+import com.reservations.reservations.model.Troupe;
 import com.reservations.reservations.service.ArtistService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import com.reservations.reservations.repository.TroupeRepository;
+import com.reservations.reservations.repository.ArtistRepository;
 
 
 @Controller
 public class ArtistController {
+    @Autowired
+    private TroupeRepository TroupeRepository;
+    @Autowired
+    private ArtistRepository ArtistRepository;
     @Autowired
     ArtistService service;
 
@@ -35,9 +43,24 @@ public class ArtistController {
         model.addAttribute("artist", artist);
         model.addAttribute("title", "Fiche d'un artiste");
 
-        return "artist/show";
-    }
+        model.addAttribute("troupes", TroupeRepository.findAll());
 
+        return "artist/show";
+
+    }
+    @PostMapping("/artists/{id}/affiliation")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String updateTroupeAffiliation(@PathVariable Long id, @RequestParam(required = false) Long troupeId) {
+        Artist artist = ArtistRepository.findById(id).orElseThrow();
+        if (troupeId != null) {
+            Troupe troupe = TroupeRepository.findById(troupeId).orElseThrow();
+            artist.setTroupe(troupe);
+        } else {
+            artist.setTroupe(null);
+        }
+        ArtistRepository.save(artist);
+        return "redirect:/artists/" + id;
+    }
     @GetMapping("/artists/{id}/edit")
     public String edit(Model model, @PathVariable("id") long id, HttpServletRequest request) {
         Artist artist = service.getArtist(id);

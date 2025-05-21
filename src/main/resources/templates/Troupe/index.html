@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Troupes</h1>
+<a th:href="@{/troupes/create}">Ajouter une troupe</a>
+<table>
+  <thead>
+  <tr>
+    <th>Nom</th>
+    <th>Logo</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="troupe : ${troupes}">
+    <td th:text="${troupe.name}"></td>
+    <td><img th:src="${troupe.logoUrl}" alt="logo" style="height:50px"/></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

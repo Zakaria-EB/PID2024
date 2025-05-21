@@ -16,7 +16,31 @@
         <ul th:unless="${#lists.isEmpty(artist.types)}" class="section-content">
             <li th:each="type : ${artist.types}" th:text="${type.type}">Type</li>
         </ul>
-
+        <div class="mt-3">
+            <h4>Troupe</h4>
+            <div th:if="${artist.troupe != null}">
+                <span th:text="${artist.troupe.name}">Nom Troupe</span>
+                <img th:src="${artist.troupe.logoUrl}" alt="Logo de la troupe"
+                     style="max-height: 50px; max-width: 50px; margin-left: 10px;">
+            </div>
+            <div th:if="${artist.troupe == null}">
+                <span>Non affilié</span>
+            </div>
+        </div>
+        <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <form th:action="@{/artists/{id}/affiliation(id=${artist.id})}" method="post" class="mt-3">
+                <label for="troupe">Changer la troupe :</label>
+                <select name="troupeId" id="troupe" class="form-select" required>
+                    <option value="" th:selected="${artist.troupe == null}">Non affilié</option>
+                    <option th:each="troupe : ${troupes}"
+                            th:value="${troupe.id}"
+                            th:text="${troupe.name}"
+                            th:selected="${artist.troupe?.id == troupe.id}">
+                    </option>
+                </select>
+                <button type="submit" class="btn btn-primary mt-2">Mettre à jour</button>
+            </form>
+        </div>
         <div class="actions">
             <a th:href="@{/artists/{id}/edit(id=${artist.id})}" class="btn-add">Edit</a>
             <form th:id="|deleteForm-${artist.id}|"

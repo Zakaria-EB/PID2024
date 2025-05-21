@@ -89,7 +89,9 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
+
 		</dependency>
+
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-mysql</artifactId>
@@ -143,5 +145,14 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<plugin>
+		<groupId>org.flywaydb</groupId>
+		<artifactId>flyway-maven-plugin</artifactId>
+		<version>10.10.0</version>
+		<configuration>
+			<url>jdbc:mysql://localhost:3306/reservations</url>
+			<user>root</user>
+			<password>root</password>
+		</configuration>
+	</plugin>
 </project>

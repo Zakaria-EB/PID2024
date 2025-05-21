@@ -44,4 +44,8 @@ public class Artist {
         }
         return this;
     }
+    @ManyToOne
+    @JoinColumn(name = "troupe_id", foreignKey = @ForeignKey(name = "fk_artist_troupe"))
+    private Troupe troupe;
+
 }
