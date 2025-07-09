@@ -144,11 +144,11 @@
         <div class="footer-column">
             <h3>Navigation</h3>
             <ul class="footer-links">
-                <li><a th:href="@{/}">Accueil</a></li>
-                <li><a th:href="@{/shows}">Spectacles</a></li>
-                <li><a th:href="@{/artists}">Artistes</a></li>
-                <li><a th:href="@{/representations}">Représentations</a></li>
-                <li><a th:href="@{/about}">À propos</a></li>
+                <li><a th:href="@{/}" aria-label="Accueil">Accueil</a></li>
+                <li><a th:href="@{/shows}" aria-label="Spectacles">Spectacles</a></li>
+                <li><a th:href="@{/artists}" aria-label="Artistes">Artistes</a></li>
+                <li><a th:href="@{/representations}" aria-label="Représentations">Représentations</a></li>
+                <li><a th:href="@{/about}" aria-label="À propos">À propos</a></li>
             </ul>
         </div>
 
@@ -156,8 +156,8 @@
             <h3>Contact</h3>
             <ul class="contact-info">
                 <li><i class="fas fa-map-marker-alt"></i> Rue du Spectacle 42, 1000 Bruxelles</li>
-                <li><i class="fas fa-phone"></i> +32 2 123 45 67</li>
-                <li><i class="fas fa-envelope"></i> contact@plateau-theatral.be</li>
+                <li><i class="fas fa-phone"></i> <a href="tel:+3221234567">+32 2 123 45 67</a></li>
+                <li><i class="fas fa-envelope"></i> <a href="mailto:contact@plateau-theatral.be">contact@plateau-theatral.be</a></li>
                 <li><i class="fas fa-clock"></i> Mardi à dimanche, 10h-22h</li>
             </ul>
             <div class="social-links">
@@ -171,8 +171,8 @@
             <h3>Newsletter</h3>
             <p>Recevez nos dernières nouvelles et offres.</p>
             <form class="newsletter-form">
-                <input type="email" placeholder="Votre email" required>
-                <button type="submit"><i class="fas fa-paper-plane"></i> S'abonner</button>
+                <input type="email" placeholder="Votre email" required aria-label="Votre email">
+                <button type="submit" aria-label="S'abonner"><i class="fas fa-paper-plane"></i> S'abonner</button>
             </form>
         </div>
     </div>
@@ -183,4 +183,3 @@
 </footer>
 </body>
 </html>
-
