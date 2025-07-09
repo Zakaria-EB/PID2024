@@ -1,23 +1,30 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>En-tête Professionnel - Le Plateau Théâtral</title>
+
+    <!-- CSS Libraries -->
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Custom CSS -->
     <style>
+        /* ========== ROOT VARIABLES ========== */
         :root {
-            --primary-color: #2c3e50;
+            --primary-color:   #2c3e50;
             --secondary-color: #3498db;
-            --hover-color: #2980b9;
-            --danger-color: #e74c3c;
-            --text-light: rgba(255, 255, 255, 0.85);
+            --hover-color:    #2980b9;
+            --danger-color:    #e74c3c;
+            --text-light:      rgba(255, 255, 255, 0.85);
         }
 
+        /* ========== NAVBAR STYLES ========== */
         .navbar {
             background-color: var(--primary-color);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -43,8 +50,9 @@
             font-size: 1.3em;
         }
 
+        /* ========== NAV ITEMS ========== */
         .nav-item {
-            margin: 0 0.3rem;
+            margin: 0 0.5rem;
             position: relative;
         }
 
@@ -71,6 +79,7 @@
             transform: translateY(-2px);
         }
 
+        /* Active state for nav items */
         .active .nav-link {
             font-weight: 600;
             color: white !important;
@@ -88,6 +97,7 @@
             border-radius: 3px;
         }
 
+        /* ========== SEARCH FORM ========== */
         .search-form {
             margin: 0 1rem;
         }
@@ -126,6 +136,7 @@
             color: white;
         }
 
+        /* ========== AUTH BUTTONS ========== */
         .auth-buttons .btn {
             margin-left: 0.5rem;
             border-radius: 50px;
@@ -158,6 +169,7 @@
             transform: translateY(-2px);
         }
 
+        /* ========== USER DROPDOWN ========== */
         .user-dropdown .dropdown-toggle {
             display: flex;
             align-items: center;
@@ -215,6 +227,7 @@
             color: white;
         }
 
+        /* ========== RESPONSIVE STYLES ========== */
         @media (max-width: 991.98px) {
             .search-form {
                 margin: 1rem 0;
@@ -258,98 +271,102 @@
     </style>
 </head>
 <body>
+<!-- ========== HEADER SECTION ========== -->
 <header th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" th:href="@{/}">
+            <!-- Brand Logo -->
+            <a class="navbar-brand" th:href="@{/}" aria-label="Le Plateau Théâtral - Accueil">
                 <i class="fas fa-theater-masks"></i>Le Plateau Théâtral
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- Mobile Toggle Button -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent"
+                    aria-controls="navbarContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+            <!-- Navbar Content -->
             <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Main Navigation -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item" th:classappend="${module == 'home' ? 'active' : ''}">
-                        <a class="nav-link" th:href="@{/}" aria-current="page">
+                        <a class="nav-link" th:href="@{/}" aria-current="page" aria-label="Accueil">
                             <i class="fas fa-home"></i> Accueil
                         </a>
                     </li>
 
                     <li class="nav-item" th:classappend="${module == 'shows' ? 'active' : ''}">
-                        <a class="nav-link" th:href="@{/shows}">
+                        <a class="nav-link" th:href="@{/shows}" aria-label="Spectacles">
                             <i class="fas fa-theater-masks"></i> Spectacles
                         </a>
                     </li>
 
                     <li class="nav-item" th:classappend="${module == 'artists' ? 'active' : ''}">
-                        <a class="nav-link" th:href="@{/artists}">
+                        <a class="nav-link" th:href="@{/artists}" aria-label="Artistes">
                             <i class="fas fa-user-tie"></i> Artistes
                         </a>
                     </li>
 
                     <li class="nav-item" th:classappend="${module == 'types' ? 'active' : ''}">
-                        <a class="nav-link" th:href="@{/types}">
+                        <a class="nav-link" th:href="@{/types}" aria-label="Catégories">
                             <i class="fas fa-tags"></i> Catégories
                         </a>
                     </li>
 
                     <li class="nav-item" th:classappend="${module == 'representations' ? 'active' : ''}">
-                        <a class="nav-link" th:href="@{/representations}">
+                        <a class="nav-link" th:href="@{/representations}" aria-label="Représentations">
                             <i class="fas fa-calendar-alt"></i> Représentations
+                        </a>
+                    </li>
+
+                    <li class="nav-item" th:classappend="${module == 'representations' ? 'active' : ''}">
+                        <a class="nav-link" th:href="@{/shows}" aria-label="Représentations">
+                            <i class="fas fa-calendar-alt"></i> Shows
                         </a>
                     </li>
                 </ul>
 
+                <!-- Right-side Elements -->
                 <div class="d-flex align-items-center ms-auto">
-                    <form class="search-form me-3" method="GET" th:action="@{/search}">
-                        <div class="input-group">
-                            <input class="form-control" type="search" placeholder="Rechercher..."
-                                   name="query" th:value="${searchQuery}" aria-label="Rechercher">
-                            <button class="btn" type="submit" aria-label="Lancer la recherche">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </form>
-
-                    <div class="auth-section" sec:authorize="!isAuthenticated()">
-                        <a th:href="@{/login}" class="btn btn-login">
-                            <i class="fas fa-sign-in-alt"></i>Connexion
-                        </a>
-                        <a th:href="@{/register}" class="btn btn-register">
-                            <i class="fas fa-user-plus"></i>Inscription
-                        </a>
-                    </div>
-
+                    <!-- Authenticated User -->
                     <div class="user-dropdown" sec:authorize="isAuthenticated()">
                         <div class="dropdown">
-                            <a class="btn dropdown-toggle" href="#" role="button" id="userDropdown"
-                               data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="btn dropdown-toggle"
+                               href="#"
+                               role="button"
+                               id="userDropdown"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false"
+                               aria-label="Mon compte">
                                 <i class="fas fa-user-circle me-2"></i>
                                 <span sec:authentication="name"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li>
-                                    <a class="dropdown-item" th:href="@{/profile}">
+                                    <a class="dropdown-item" th:href="@{/profile}" aria-label="Mon profil">
                                         <i class="fas fa-user"></i> Mon profil
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" th:href="@{/my-tickets}">
+                                    <a class="dropdown-item" th:href="@{/my-tickets}" aria-label="Mes billets">
                                         <i class="fas fa-ticket-alt"></i> Mes billets
                                     </a>
                                 </li>
                                 <li sec:authorize="hasRole('ADMIN')">
-                                    <a class="dropdown-item" th:href="@{/admin}">
+                                    <a class="dropdown-item" th:href="@{/admin}" aria-label="Administration">
                                         <i class="fas fa-cog"></i> Administration
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li class="logout-item">
                                     <form th:action="@{/logout}" method="post" class="mb-0">
-                                        <button type="submit" class="dropdown-item">
+                                        <button type="submit" class="dropdown-item" aria-label="Déconnexion">
                                             <i class="fas fa-sign-out-alt"></i> Déconnexion
                                         </button>
                                     </form>
@@ -361,48 +378,9 @@
             </div>
         </div>
     </nav>
-<header class="navbar" th:fragment="header">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#" th:href="@{/}">Réservations</a>
-        </div>
-        <nav>
-            <ul class="nav">
-                <li th:classappend="${module == 'artists' ? 'active' : ''}">
-                    <a th:href="@{/artists}">Artists</a>
-                </li>
-                <li th:classappend="${module == 'shows' ? 'active' : ''}">
-                    <a th:href="@{/shows}">Shows</a>
-                </li>
-                <li th:classappend="${module == 'representations' ? 'active' : ''}">
-                    <a th:href="@{/representations}">Representations</a>
-                </li>
-
-                <!-- Si utilisateur NON connecté -->
-                <li sec:authorize="isAnonymous()">
-                    <a class="btn btn-outline-light btn-sm" th:href="@{/login}">Se connecter</a>
-                </li>
-                <li sec:authorize="isAnonymous()">
-                    <a class="btn btn-outline-light btn-sm ms-2" th:href="@{/register}">S’inscrire</a>
-                </li>
-
-                <!-- Si utilisateur connecté -->
-                <li sec:authorize="isAuthenticated()">
-                <li th:classappend="${module == 'user' ? 'active' : ''}">
-<!--                    <a href="#" th:href="@{/user}">User</a>-->
-                    <a th:href="@{/users/1/edit}">Modifier le profil</a>
-                </li>
-                <li class="nav-item">
-                    <form th:action="@{/logout}" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-outline-light btn-sm ms-2">
-                            <li class="fas fa-sign-out-alt me-1"></i> Se déconnecter
-                        </button>
-                    </form>
-                </li>
-            </ul>
-    </div>
 </header>
 
+<!-- JavaScript Libraries -->
 <!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
