@@ -4,6 +4,7 @@
       layout:decorate="~{layouts/main}"
       xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
+<<<<<<< HEAD
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Inscription – Réservations de spectacles</title>
@@ -11,10 +12,190 @@
     <!-- Bootstrap + FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+=======
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inscription – Réservations de spectacles</title>
+
+  <!-- Bootstrap + FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <style>
+    :root {
+      --primary-color: #4a6bff;
+      --primary-hover: #3a56d4;
+      --secondary-color: #6c757d;
+      --light-bg: #f8f9fa;
+      --dark-color: #212529;
+      --success-color: #28a745;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, #2c3e50 0%, #4a6bff 100%);
+      padding: 4rem 0;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z" /></svg>');
+      background-size: cover;
+      opacity: 0.1;
+    }
+
+    .form-section {
+      padding: 4rem 0;
+      background-color: var(--light-bg);
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      padding: 2.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .form-label {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--dark-color);
+    }
+
+    .form-control {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(74, 107, 255, 0.25);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      border-color: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-dark {
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-dark:hover {
+      transform: translateY(-2px);
+    }
+
+    .password-strength {
+      height: 4px;
+      background-color: #e9ecef;
+      margin-top: 0.5rem;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease, background-color 0.3s ease;
+    }
+
+    .input-group-text {
+      background-color: #f8f9fa;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .password-toggle {
+      cursor: pointer;
+      background-color: #f8f9fa;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .cta-section {
+      padding: 4rem 0;
+      background-color: white;
+    }
+
+    .form-footer {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--secondary-color);
+    }
+
+    .form-footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Animation pour les messages d'erreur */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert {
+      animation: fadeIn 0.3s ease-out;
+      border-radius: 8px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 3rem 0;
+      }
+
+      .form-section, .cta-section {
+        padding: 3rem 0;
+      }
+
+      .form-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+>>>>>>> 1a66c15 ( modifcation du template d'iscription)
 </head>
 <body>
 <div layout:fragment="content">
 
+<<<<<<< HEAD
     <!-- HERO SECTION -->
     <section class="bg-dark text-light text-center py-5">
         <div class="container">
@@ -87,10 +268,253 @@
             </a>
         </div>
     </section>
+=======
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <h1 class="display-4 fw-bold mb-3">Créez votre compte</h1>
+          <p class="lead mb-4">Rejoignez notre communauté culturelle et accédez à des avantages exclusifs</p>
+          <div class="d-flex justify-content-center gap-3">
+            <a th:href="@{/login}" class="btn btn-outline-light">
+              <i class="fas fa-sign-in-alt me-2"></i> Déjà membre ?
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM SECTION -->
+  <section class="form-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="form-card">
+            <div class="text-center mb-4">
+              <h2 class="fw-bold mb-3">Commençons l'aventure</h2>
+              <p class="text-muted">Remplissez le formulaire pour créer votre compte</p>
+            </div>
+
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+              <span th:text="${error}"></span>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <form th:action="@{/register}" method="post" id="registrationForm">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="firstname" class="form-label">Prénom</label>
+                  <input type="text" id="firstname" name="firstname" class="form-control" required
+                         placeholder="Votre prénom">
+                </div>
+
+                <div class="col-md-6">
+                  <label for="lastname" class="form-label">Nom de famille</label>
+                  <input type="text" id="lastname" name="lastname" class="form-control" required
+                         placeholder="Votre nom">
+                </div>
+
+                <div class="col-12">
+                  <label for="email" class="form-label">Adresse email</label>
+                  <input type="email" id="email" name="email" class="form-control" required
+                         placeholder="exemple@email.com">
+                </div>
+
+                <div class="col-12">
+                  <label for="login" class="form-label">Nom d'utilisateur</label>
+                  <input type="text" id="login" name="login" class="form-control" required
+                         placeholder="Choisissez un pseudonyme">
+                </div>
+
+                <div class="col-12">
+                  <label for="password" class="form-label">Mot de passe</label>
+                  <div class="input-group mb-1">
+                    <input type="password" id="password" name="password" class="form-control" required
+                           placeholder="Créez un mot de passe sécurisé">
+                    <span class="input-group-text password-toggle" id="togglePassword">
+                      <i class="fas fa-eye"></i>
+                    </span>
+                  </div>
+                  <div class="password-strength">
+                    <div class="password-strength-bar" id="passwordStrength"></div>
+                  </div>
+                  <small class="text-muted">Minimum 8 caractères avec des chiffres et lettres</small>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="langue" class="form-label">Langue préférée</label>
+                  <select id="langue" name="langue" class="form-select" required>
+                    <option value="" disabled selected>Sélectionnez une langue</option>
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="de">Deutsch</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Date de naissance (optionnel)</label>
+                  <input type="date" id="birthdate" name="birthdate" class="form-control">
+                </div>
+
+                <div class="col-12 mt-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="terms" required>
+                    <label class="form-check-label" for="terms">
+                      J'accepte les <a href="/terms" target="_blank">conditions d'utilisation</a> et la
+                      <a href="/privacy" target="_blank">politique de confidentialité</a>
+                    </label>
+                  </div>
+
+                  <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" id="newsletter">
+                    <label class="form-check-label" for="newsletter">
+                      Je souhaite recevoir les newsletters et offres spéciales
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-12 mt-4">
+                  <button type="submit" class="btn btn-primary w-100 py-3">
+                    <i class="fas fa-user-plus me-2"></i> Créer mon compte
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <div class="form-footer mt-4">
+              <p>Vous avez déjà un compte ? <a th:href="@{/login}">Connectez-vous ici</a></p>
+              <p class="mt-2">En vous inscrivant, vous confirmez que vous avez au moins 16 ans</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS SECTION -->
+  <section class="py-5 bg-white">
+    <div class="container">
+      <h2 class="text-center mb-5">Pourquoi créer un compte ?</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="text-center p-4">
+            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+              <i class="fas fa-ticket-alt fa-2x text-primary"></i>
+            </div>
+            <h3 class="h5">Réservations rapides</h3>
+            <p class="text-muted">Accédez à un processus de réservation simplifié pour vos spectacles préférés</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="text-center p-4">
+            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+              <i class="fas fa-percent fa-2x text-primary"></i>
+            </div>
+            <h3 class="h5">Avantages exclusifs</h3>
+            <p class="text-muted">Bénéficiez de réductions spéciales et d'offres réservées aux membres</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="text-center p-4">
+            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+              <i class="fas fa-bell fa-2x text-primary"></i>
+            </div>
+            <h3 class="h5">Alertes personnalisées</h3>
+            <p class="text-muted">Soyez informé des nouveaux spectacles correspondant à vos préférences</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+>>>>>>> 1a66c15 ( modifcation du template d'iscription)
 
 </div>
 
 <!-- JS Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<<<<<<< HEAD
 </body>
 </html>
+=======
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Toggle password visibility
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+
+    if (togglePassword && password) {
+      togglePassword.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+      });
+    }
+
+    // Password strength indicator
+    const passwordInput = document.getElementById('password');
+    const strengthBar = document.getElementById('passwordStrength');
+
+    if (passwordInput && strengthBar) {
+      passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        let strength = 0;
+
+        // Check length
+        if (password.length >= 8) strength += 1;
+        if (password.length >= 12) strength += 1;
+
+        // Check for numbers
+        if (/\d/.test(password)) strength += 1;
+
+        // Check for special chars
+        if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 1;
+
+        // Check for uppercase and lowercase
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 1;
+
+        // Update strength bar
+        let width = 0;
+        let color = '#dc3545'; // red
+
+        if (strength <= 1) {
+          width = 25;
+        } else if (strength <= 3) {
+          width = 50;
+          color = '#ffc107'; // yellow
+        } else if (strength <= 4) {
+          width = 75;
+          color = '#28a745'; // green
+        } else {
+          width = 100;
+          color = '#28a745'; // green
+        }
+
+        strengthBar.style.width = width + '%';
+        strengthBar.style.backgroundColor = color;
+      });
+    }
+
+    // Form validation
+    const form = document.getElementById('registrationForm');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        const terms = document.getElementById('terms');
+        if (!terms.checked) {
+          e.preventDefault();
+          alert('Veuillez accepter les conditions d\'utilisation pour continuer');
+          terms.focus();
+        }
+      });
+    }
+  });
+</script>
+</body>
+</html>
+>>>>>>> 1a66c15 ( modifcation du template d'iscription)
