@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+<head>
+    <!-- Le titre inséré dans layout/admin -->
+    <title>Administration – Spectacles</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">Gestion des spectacles</h1>
+        <a th:href="@{/admin/shows/new}"
+           class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+            + Nouveau spectacle
+        </a>
+    </div>
+
+    <table class="min-w-full bg-white shadow rounded overflow-hidden">
+        <thead class="bg-gray-100">
+        <tr>
+            <th class="px-4 py-2 text-left">ID</th>
+            <th class="px-4 py-2 text-left">Titre</th>
+            <th class="px-4 py-2 text-left">Lieu</th>
+            <th class="px-4 py-2 text-left">Réservable</th>
+            <th class="px-4 py-2 text-left">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="show : ${shows}"
+            class="border-t hover:bg-gray-50">
+            <!-- ID -->
+            <td class="px-4 py-2" th:text="${show.id}">1</td>
+
+            <!-- Titre -->
+            <td class="px-4 py-2" th:text="${show.title}">Titre du spectacle</td>
+
+            <!-- Lieu (avec garde null) -->
+            <td class="px-4 py-2"
+                th:text="${show.location != null ? show.location.designation : '—'}">
+                Lieu
+            </td>
+
+            <!-- Réservable -->
+            <td class="px-4 py-2">
+            <span th:if="${show.bookable}"
+                  class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Oui</span>
+                <span th:unless="${show.bookable}"
+                      class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">Non</span>
+            </td>
+
+            <!-- Actions -->
+            <td class="px-4 py-2 space-x-2">
+                <a th:href="@{/admin/shows/{id}/edit(id=${show.id})}"
+                   class="text-blue-600 hover:underline">Modifier</a>
+
+                <form th:action="@{/admin/shows/{id}/delete(id=${show.id})}"
+                      method="post"
+                      class="inline"
+                      onsubmit="return confirm('Confirmer la suppression ?');">
+                    <button type="submit"
+                            class="text-red-600 hover:underline">Supprimer
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

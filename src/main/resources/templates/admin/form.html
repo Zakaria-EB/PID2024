@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:if="${editingId != null}" th:text="'Modifier un spectacle'">Modifier</title>
+    <title th:unless="${editingId != null}" th:text="'Créer un spectacle'">Créer</title>
+</head>
+<body>
+<div layout:fragment="content" class="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+
+    <h1 class="text-3xl font-bold mb-6"
+        th:text="${editingId != null} ? 'Modifier un spectacle' : 'Créer un spectacle'">
+        Formulaire Spectacle
+    </h1>
+
+    <form th:action="${editingId != null}
+                   ? @{/admin/shows/{id}/edit(id=${editingId})}
+                   : @{/admin/shows/new}"
+          th:object="${showForm}"
+          method="post"
+          class="space-y-8">
+
+        <!-- Bloc 1 : Titre & Description -->
+        <div class="grid grid-cols-1 gap-6">
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">Titre</label>
+                <input th:field="*{title}"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">Description</label>
+                <textarea th:field="*{description}"
+                          rows="4"
+                          class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"></textarea>
+            </div>
+        </div>
+
+        <!-- Bloc 2 : Affiche & Lieu & Réservable -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">Affiche (URL)</label>
+                <input th:field="*{posterUrl}"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">Lieu</label>
+                <select th:field="*{locationId}" id="show-location-select"
+                        class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200">
+                    <option th:each="loc : ${locations}"
+                            th:value="${loc.id}"
+                            th:text="${loc.designation}"/>
+                </select>
+            </div>
+            <div class="flex items-center space-x-2">
+                <input type="checkbox" th:field="*{bookable}" id="bookable"
+                       class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200"/>
+                <label for="bookable" class="text-gray-700 font-medium">Réservable ?</label>
+            </div>
+        </div>
+
+        <!-- Bloc 3 : Tarifs -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">Tarif Plein (€)</label>
+                <input type="number" step="0.01" th:field="*{fullPrice}"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
+                <div>
+                    <label>Début validité plein</label>
+                    <input type="date" th:field="*{fullPriceStartDate}" class="w-full border rounded px-3 py-2"/>
+                </div>
+                <div>
+                    <label>Fin validité plein</label>
+                    <input type="date" th:field="*{fullPriceEndDate}" class="w-full border rounded px-3 py-2"/>
+                </div>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">Tarif Réduit (€)</label>
+                <input type="number" step="0.01" th:field="*{reducedPrice}"
+                       class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
+                <div>
+                    <label>Début validité réduit</label>
+                    <input type="date" th:field="*{reducedPriceStartDate}" class="w-full border rounded px-3 py-2"/>
+                </div>
+                <div>
+                    <label>Fin validité réduit</label>
+                    <input type="date" th:field="*{reducedPriceEndDate}" class="w-full border rounded px-3 py-2"/>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Bloc 4 : Représentations -->
+        <fieldset id="reps-fieldset" class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <legend class="px-2 text-gray-800 font-semibold">Représentations</legend>
+            <div class="space-y-4">
+                <div th:each="rep, iStat : *{representations}"
+                     class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end rep-item"
+                     th:attr="data-index=${iStat.index}">
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-1">Date &amp; Heure</label>
+                        <input type="datetime-local"
+                               th:field="*{representations[__${iStat.index}__].scheduledAt}"
+                               class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-1">Capacité</label>
+                        <input type="number"
+                               th:field="*{representations[__${iStat.index}__].capacity}"
+                               class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-1">Lieu de représentation</label>
+                        <select th:field="*{representations[__${iStat.index}__].locationId}"
+                                class="w-full border border-gray-300 rounded px-3 py-2 rep-location-select focus:ring focus:ring-blue-200">
+                            <option th:each="loc : ${locations}"
+                                    th:value="${loc.id}"
+                                    th:text="${loc.designation}"/>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center">
+                        <button type="button" class="remove-rep text-red-600 hover:underline">
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="add-rep-btn"
+                    class="mt-4 px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50">
+                + Ajouter une représentation
+            </button>
+        </fieldset>
+
+        <!-- Bloc 5 : Tags -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">Mots-clés existants</label>
+                <select multiple th:field="*{tagIds}"
+                        class="w-full h-32 border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200">
+                    <option th:each="t : ${tags}"
+                            th:value="${t.id}"
+                            th:text="${t.tag}"/>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">Nouveaux mots-clés</label>
+                <div id="new-tags-fieldset" class="space-y-3">
+                    <div th:each="nt, kStat : *{newTags}"
+                         class="flex items-center space-x-2 new-tag-item"
+                         th:attr="data-index=${kStat.index}">
+                        <input type="text"
+                               th:field="*{newTags[__${kStat.index}__]}"
+                               placeholder="Entrer un mot-clé"
+                               class="flex-1 border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
+                        <button type="button"
+                                class="remove-new-tag text-red-600 hover:underline whitespace-nowrap">
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+                <button type="button" id="add-new-tag-btn"
+                        class="mt-2 inline-block text-blue-600 hover:underline">
+                    + Ajouter un mot-clé
+                </button>
+            </div>
+        </div>
+
+        <!-- Bloc 6 : Collaborateurs -->
+        <fieldset id="collab-fieldset" class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <legend class="px-2 text-gray-800 font-semibold">Collaborateurs</legend>
+            <div class="space-y-4">
+                <div th:each="col, jStat : *{collaborators}"
+                     class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end collab-item"
+                     th:attr="data-index=${jStat.index}">
+                    <!-- Sélecteur artiste + lien ajout -->
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-1">Artiste</label>
+                        <div class="flex items-center space-x-2">
+                            <select th:field="*{collaborators[__${jStat.index}__].artistId}"
+                                    class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200">
+                                <option th:each="a : ${artists}"
+                                        th:value="${a.id}"
+                                        th:text="${a.firstname + ' ' + a.lastname}"/>
+                            </select>
+                            <a th:href="@{/admin/artists/new}"
+                               target="_blank"
+                               class="text-blue-600 text-sm hover:underline whitespace-nowrap"
+                               title="Ouvre la page de création d'un nouvel artiste">
+                                + Nouvel artiste
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Sélecteur type -->
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-1">Type</label>
+                        <select th:field="*{collaborators[__${jStat.index}__].typeId}"
+                                class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200">
+                            <option th:each="t : ${types}"
+                                    th:value="${t.id}"
+                                    th:text="${t.type}"/>
+                        </select>
+                    </div>
+                    <!-- Bouton supprimer -->
+                    <div class="flex items-center">
+                        <button type="button" class="remove-collab text-red-600 hover:underline">
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="add-collab-btn"
+                    class="mt-4 px-4 py-2 border border-blue-600 text-blue-600 rounded hover:bg-blue-50">
+                + Ajouter un collaborateur
+            </button>
+        </fieldset>
+
+        <!-- Bouton de soumission -->
+        <div class="flex justify-end">
+            <button type="submit"
+                    class="px-8 py-3 bg-green-600 text-white font-semibold rounded shadow hover:bg-green-700">
+                <span th:text="${editingId != null} ? 'Mettre à jour' : 'Créer le spectacle'">
+                  Créer le spectacle
+                </span>
+            </button>
+        </div>
+    </form>
+
+    <!-- PROTOTYPES CACHÉS -->
+    <div id="rep-prototype" class="hidden">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end rep-item" data-index="__index__">
+            <div>
+                <label>Date &amp; Heure</label>
+                <input type="datetime-local" name="representations[__index__].scheduledAt"
+                       class="w-full border border-gray-300 rounded px-3 py-2"/>
+            </div>
+            <div>
+                <label>Capacité</label>
+                <input type="number" name="representations[__index__].capacity"
+                       class="w-full border border-gray-300 rounded px-3 py-2"/>
+            </div>
+            <div>
+                <label>Lieu de représentation</label>
+                <select name="representations[__index__].locationId"
+                        class="w-full border border-gray-300 rounded px-3 py-2 rep-location-select">
+                    <option th:each="loc : ${locations}"
+                            th:value="${loc.id}"
+                            th:text="${loc.designation}"/>
+                </select>
+            </div>
+            <div class="flex items-center">
+                <button type="button" class="remove-rep text-red-600 hover:underline">
+                    Supprimer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="new-tag-prototype" class="hidden">
+        <div class="flex items-center space-x-2 new-tag-item" data-index="__index__">
+            <input type="text"
+                   name="newTags[__index__]"
+                   placeholder="Entrer un mot-clé"
+                   class="flex-1 border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
+            <button type="button"
+                    class="remove-new-tag text-red-600 hover:underline">
+                Supprimer
+            </button>
+        </div>
+    </div>
+
+    <div id="collab-prototype" class="hidden">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end collab-item" data-index="__index__">
+            <div>
+                <label>Artiste</label>
+                <div class="flex items-center space-x-2">
+                    <select name="collaborators[__index__].artistId"
+                            class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option th:each="a : ${artists}"
+                                th:value="${a.id}"
+                                th:text="${a.firstname + ' ' + a.lastname}"/>
+                    </select>
+                    <a th:href="@{/admin/artists/new}"
+                       target="_blank"
+                       class="text-blue-600 text-sm hover:underline whitespace-nowrap"
+                       title="Ouvre la page de création d'un nouvel artiste">
+                        + Nouvel artiste
+                    </a>
+                </div>
+            </div>
+            <div>
+                <label>Type</label>
+                <select name="collaborators[__index__].typeId"
+                        class="w-full border border-gray-300 rounded px-3 py-2">
+                    <option th:each="t : ${types}"
+                            th:value="${t.id}"
+                            th:text="${t.type}"/>
+                </select>
+            </div>
+            <div class="flex items-center">
+                <button type="button" class="remove-collab text-red-600 hover:underline">
+                    Supprimer
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- SCRIPTS DANS LE FRAGMENT "scripts" -->
+<th:block layout:fragment="scripts">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const showLoc = document.getElementById('show-location-select');
+
+            function syncRepLocations() {
+                const sel = showLoc.value;
+                document.querySelectorAll('.rep-location-select')
+                    .forEach(el => el.value = sel);
+            }
+
+            syncRepLocations();
+            showLoc.addEventListener('change', syncRepLocations);
+
+            // handlers communs
+            function attachHandlers() {
+                document.querySelectorAll('.remove-rep').forEach(btn => {
+                    btn.onclick = () => btn.closest('.rep-item').remove();
+                });
+                document.querySelectorAll('.remove-collab').forEach(btn => {
+                    btn.onclick = () => btn.closest('.collab-item').remove();
+                });
+                document.querySelectorAll('.remove-new-tag').forEach(btn => {
+                    btn.onclick = () => btn.closest('.new-tag-item').remove();
+                });
+            }
+
+            // Ajout dynamique
+            document.getElementById('add-rep-btn').addEventListener('click', () => {
+                const set = document.getElementById('reps-fieldset');
+                const idx = set.querySelectorAll('.rep-item').length;
+                const proto = document.getElementById('rep-prototype').innerHTML.trim();
+                set.insertAdjacentHTML('beforeend', proto.replace(/__index__/g, idx));
+                attachHandlers();
+                syncRepLocations();
+            });
+            document.getElementById('add-new-tag-btn').addEventListener('click', () => {
+                const set = document.getElementById('new-tags-fieldset');
+                const idx = set.querySelectorAll('.new-tag-item').length;
+                const proto = document.getElementById('new-tag-prototype').innerHTML.trim();
+                set.insertAdjacentHTML('beforeend', proto.replace(/__index__/g, idx));
+                attachHandlers();
+            });
+            document.getElementById('add-collab-btn').addEventListener('click', () => {
+                const set = document.getElementById('collab-fieldset');
+                const idx = set.querySelectorAll('.collab-item').length;
+                const proto = document.getElementById('collab-prototype').innerHTML.trim();
+                set.insertAdjacentHTML('beforeend', proto.replace(/__index__/g, idx));
+                attachHandlers();
+            });
+
+            // initial
+            attachHandlers();
+        });
+    </script>
+</th:block>
+</body>
+</html>
