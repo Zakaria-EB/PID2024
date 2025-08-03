@@ -1,0 +1,48 @@
+<!-- src/main/resources/templates/layouts/admin.html -->
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <!-- Le titre sera "ICC Réservation - Titre de la page" -->
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">ICC Réservation</title>
+
+    <!-- Tailwind via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+
+    <!-- Bloc pour CSS spécifiques à chaque page -->
+    <th:block layout:fragment="css"></th:block>
+</head>
+<body class="bg-gray-100">
+
+<!-- Header commun -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- Contenu principal, avec padding-top pour laisser la place au header fixe -->
+<main class="pt-20 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Notifications flash -->
+    <div id="notification">
+        <div th:if="${successMessage}"
+             class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            <p th:text="${successMessage}"></p>
+        </div>
+        <div th:if="${errorMessage}"
+             class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <p th:text="${errorMessage}"></p>
+        </div>
+    </div>
+
+    <!-- Ici sera injecté le contenu spécifique de la page -->
+    <div layout:fragment="content">
+        <!-- contenu enfant -->
+    </div>
+</main>
+
+<!-- Footer commun -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- Bloc pour scripts spécifiques à chaque page -->
+<th:block layout:fragment="scripts"></th:block>
+</body>
+</html>

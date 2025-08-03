@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{layouts/main}">
+
+<head>
+    <title>Mes réservations</title>
+</head>
+<body>
+<div layout:fragment="content" class="max-w-5xl mx-auto py-10">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">📄 Mes réservations confirmées</h1>
+
+    <div th:if="${#lists.isEmpty(reservations)}" class="text-gray-500 italic">
+        Vous n'avez pas encore de réservation confirmée.
+    </div>
+
+    <div th:unless="${#lists.isEmpty(reservations)}" class="space-y-6">
+        <div th:each="reservation : ${reservations}" class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold text-gray-700 mb-2">Réservation n°<span th:text="${reservation.id}">123</span></h2>
+            <p class="text-gray-600 mb-4">
+                Date de réservation :
+                <span th:text="${#temporals.format(reservation.bookingDate, 'dd/MM/yyyy HH:mm')}"></span>
+            </p>
+
+            <div>
+                <h3 class="font-semibold text-gray-700 mb-2">Détails :</h3>
+                <ul class="list-disc list-inside space-y-1">
+                    <li th:each="item : ${reservation.items}">
+                        🎭 <span th:text="${#temporals.format(item.representation.scheduledAt, 'dd/MM/yyyy HH:mm')}">Date</span> -
+                        <span th:text="${item.price.price + '€'}">Prix</span> x
+                        <span th:text="${item.quantity}">Quantité</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8">
+        <a th:href="@{/shows}"
+           class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+            ← Retour aux spectacles
+        </a>
+    </div>
+</div>
+</body>
+</html>

@@ -16,8 +16,8 @@
     </h1>
 
     <form th:action="${editingId != null}
-                   ? @{/admin/shows/{id}/edit(id=${editingId})}
-                   : @{/admin/shows/new}"
+                ? @{'/admin/shows/' + ${editingId} + '/edit'}
+                : @{/admin/shows/new}"
           th:object="${showForm}"
           method="post"
           class="space-y-8">

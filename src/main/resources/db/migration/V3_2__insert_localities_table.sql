@@ -1,5 +1,22 @@
-INSERT INTO `localities` (`id`, `postal_code`, `locality`) VALUES
-(1, '1000', 'Bruxelles'),
-(2, '1020', 'Laeken'),
-(3, '1030', 'Schaerbeek'),
-(4, '1170', 'Watermael-Boistfort');
+INSERT INTO `localities` (`id`, `postal_code`, `locality`)
+VALUES (1, '1000', 'Bruxelles'),
+       (2, '1020', 'Laeken'),
+       (3, '1030', 'Schaerbeek'),
+       (4, '1170', 'Watermael-Boistfort'),
+       (5, '1040', 'Etterbeek'),
+       (6, '1050', 'Ixelles'),
+       (7, '1060', 'Saint-Gilles'),
+       (8, '1070', 'Anderlecht'),
+       (9, '1080', 'Molenbeek-Saint-Jean'),
+       (10, '1090', 'Forest'),
+       (11, '4000', 'Liège'),
+       (12, '4020', 'Seraing'),
+       (13, '5000', 'Namur'),
+       (14, '6000', 'Charleroi'),
+       (15, '7000', 'Mons'),
+       (16, '8000', 'Bruges'),
+       (17, '9000', 'Ghent'),
+       (18, '2000', 'Anvers'),
+       (19, '3000', 'Leuven'),
+       (20, '3500', 'Hasselt'),
+       (21, '8400', 'Oostende');

@@ -1,62 +1,102 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
-      xmlns:th="http://www.w3.org/1999/xhtml"
       layout:decorate="~{layouts/main}">
 <head>
     <title>Liste des spectacles</title>
-    <!-- Bootstrap & FontAwesome -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
-<div class="container my-4">
+<div class="max-w-7xl mx-auto px-6 py-10">
     <div layout:fragment="content">
 
-        <!-- TITRE -->
-        <h1 th:if="${excludedTag}" class="mb-3">
-            Spectacles sans le mot-clé : "<strong th:text="${excludedTag}">tag</strong>"
-        </h1>
-        <h1 th:if="${excludedTag == null}" th:text="${title}" class="mb-3">Liste des spectacles</h1>
+        <!-- Titre -->
+        <div class="mb-10">
+            <h1 class="text-4xl font-extrabold text-gray-900" th:text="${title}">Liste des spectacles</h1>
+        </div>
 
-        <!-- FORMULAIRE DE RECHERCHE -->
-        <form th:action="@{/shows}" method="get" class="mb-4 d-flex gap-2">
-            <input type="text" name="search" class="form-control" placeholder="Rechercher par mot-clé..."
-                   th:value="${search}">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-search"></i> Rechercher
+        <!-- Recherche par tag -->
+        <form method="get" th:action="@{/shows}" class="mb-6 flex gap-3 items-center">
+            <label for="tag" class="text-gray-700">Rechercher par mot-clé :</label>
+            <select id="tag" name="tag" class="border rounded px-3 py-1">
+                <option value="">-- Tous les spectacles --</option>
+                <option th:each="tag : ${availableTags}" th:value="${tag.tag}" th:text="${tag.tag}"
+                        th:selected="${param.tag == tag.tag}"></option>
+            </select>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Rechercher
             </button>
         </form>
 
-        <!-- AFFICHAGE DU NOMBRE DE RÉSULTATS -->
-        <p th:if="${search}" class="text-muted">
-            <span th:text="${resultsCount}">0</span> résultat(s) pour "<strong th:text="${search}">mot</strong>"
+        <p th:if="${resultCount != null}" class="text-sm text-gray-600 italic mb-4">
+            <span th:text="${resultCount}">x</span> résultat(s) trouvé(s)
         </p>
 
-        <p th:if="${excludedTag}" class="text-muted">
-            <span th:text="${#lists.size(shows)}">0</span> spectacle(s) sans le mot-clé "<strong th:text="${excludedTag}">tag</strong>"
-        </p>
+        <!-- Grid des spectacles -->
+        <div th:if="${shows != null and !#lists.isEmpty(shows)}"
+             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <!-- LISTE DES SPECTACLES -->
-        <ul th:unless="${#lists.isEmpty(shows)}" class="list-group">
-            <li th:each="show : ${shows}" class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <span th:text="${show.title}" class="fw-bold">Ayiti</span>
-                    <span th:if="${show.bookable}" th:text="${show.price} + ' €'" class="text-success">9.99 €</span><br/>
+            <div th:each="show : ${shows}"
+                 class="bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300 overflow-hidden flex flex-col">
 
-                    <span th:if="${#lists.size(show.representations)==1}">- 1 représentation</span>
-                    <span th:if="${#lists.size(show.representations)>1}"
-                          th:text="|- ${#lists.size(show.representations)} représentations|">- 2 représentations</span>
-                    <em th:if="${#lists.size(show.representations)==0}">aucune représentation</em>
+                <!-- Affiche -->
+                <div class="h-48 bg-gray-100 flex items-center justify-center">
+                    <img th:if="${show.posterUrl != null}"
+                         th:src="@{'/images/' + ${show.posterUrl}}"
+                         th:alt="${show.title}"
+                         class="object-contain w-full h-full p-2"/>
+                    <span th:unless="${show.posterUrl}" class="text-gray-400 italic text-sm">Pas d'image</span>
                 </div>
 
-                <a th:href="@{/shows/{id}(id=${show.id})}" class="btn btn-outline-secondary btn-sm">
-                    <i class="fas fa-eye"></i> Voir
-                </a>
-            </li>
-        </ul>
+                <!-- Infos -->
+                <div class="p-4 flex-1 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800 mb-1" th:text="${show.title}">Ayiti</h2>
 
-        <!-- MESSAGE SI AUCUN RÉSULTAT -->
-        <p th:if="${#lists.isEmpty(shows)}" class="text-danger mt-3">Aucun spectacle trouvé.</p>
+                        <div class="flex flex-wrap items-center gap-2 text-sm mb-3">
+
+                            <!-- Badge “réservable” en vert ou rouge selon la disponibilité globale -->
+                            <span th:if="${show.bookable}"
+                                  class="inline-block px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                                Réservable
+                            </span>
+                            <span th:unless="${show.bookable}"
+                                  class="inline-block px-2 py-1 bg-red-100 text-red-600 rounded-full text-xs font-medium">
+                                Non réservable
+                            </span>
+
+                            <!-- Prix -->
+                            <span th:if="${show.prices != null and !#lists.isEmpty(show.prices)}"
+                                  class="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium"
+                                  th:text="${show.prices[0].price + ' €'}">9.99 €</span>
+                            <span th:if="${show.prices == null or #lists.isEmpty(show.prices)}"
+                                  class="text-gray-400 italic text-xs">Prix non défini</span>
+
+                            <!-- Nombre de représentations -->
+                            <span th:if="${#lists.size(show.representations) > 0}"
+                                  class="inline-block px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-medium"
+                                  th:text="${#lists.size(show.representations) + ' représentations'}">2 représentations</span>
+                            <span th:if="${#lists.size(show.representations) == 0}"
+                                  class="inline-block px-2 py-1 bg-gray-100 text-gray-500 rounded-full text-xs font-medium italic">
+                                Aucune représentation
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Voir -->
+                    <div class="mt-3">
+                        <a th:href="@{/shows/{id}(id=${show.id})}"
+                           class="inline-block text-sm text-blue-600 font-semibold hover:underline">
+                            Voir les détails →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aucun résultat -->
+        <div th:if="${shows == null or #lists.isEmpty(shows)}"
+             class="text-center text-gray-500 italic bg-white py-10 rounded shadow border mt-8 text-lg">
+            Aucun spectacle n’a encore été enregistré.
+        </div>
 
     </div>
 </div>

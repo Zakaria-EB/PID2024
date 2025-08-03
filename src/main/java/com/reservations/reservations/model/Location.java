@@ -1,6 +1,14 @@
 package com.reservations.reservations.model;
 
 
+
+
+
+
+
+
+
+
 import com.github.slugify.Slugify;
 import jakarta.persistence.*;
 

@@ -46,7 +46,7 @@ public class ReviewController {
 
         Show show = showService.get(showId.toString());
         if (show == null) {
-            return "redirect:/dev/shows";
+            return "redirect:/shows";
         }
 
         Review r = new Review();
@@ -59,7 +59,7 @@ public class ReviewController {
 
         reviewService.addReview(r);
 
-        return "redirect:/dev/shows/" + showId;
+        return "redirect:/shows/" + showId;
     }
 
     @PostMapping("/update")
@@ -76,7 +76,7 @@ public class ReviewController {
             reviewService.addReview(review);
         }
 
-        return "redirect:/dev/shows/" + review.getShow().getId();
+        return "redirect:/shows/" + review.getShow().getId();
     }
 
     @PostMapping("/delete")
@@ -95,6 +95,6 @@ public class ReviewController {
             }
         }
 
-        return "redirect:/dev/shows/" + (review != null ? review.getShow().getId() : "");
+        return "redirect:/shows/" + (review != null ? review.getShow().getId() : "");
     }
 }
