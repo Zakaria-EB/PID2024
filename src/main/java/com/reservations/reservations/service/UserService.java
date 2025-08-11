@@ -40,4 +40,24 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    @Autowired
+    private UserRepository repository;
+
+
+    public User getUser(String id) {
+        int indice = Integer.parseInt(id);
+
+        return repository.findById(indice);
+    }
+
+    public void updateUser(String id, User user) {
+        repository.save(user);
+    }
+
+    public void deleteUser(String id) {
+        Long indice = (long) Integer.parseInt(id);
+
+        repository.deleteById(indice);
+    }
+
 }

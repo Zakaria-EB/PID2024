@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout" layout:decorate="~{layouts/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier profil</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Modifier le profil</h1>
+    <form th:action="@{/users/{id}/edit(id=${user.id})}" th:object="${user}" th:method="put">
+        <div>
+            <label>Login:</label>
+            <input type="text" th:field="*{login}" required />
+        </div>
+        <div>
+            <label>Prénom:</label>
+            <input type="text" th:field="*{firstname}" required />
+        </div>
+        <div>
+            <label>Nom:</label>
+            <input type="text" th:field="*{lastname}" required />
+        </div>
+        <div>
+            <label>Email:</label>
+            <input type="email" th:field="*{email}" required />
+        </div>
+        <div>
+            <label>Langue:</label>
+            <input type="text" th:field="*{langue}" />
+        </div>
+        <div>
+            <button type="submit">Enregistrer</button>
+            <a th:href="${back}">Annuler</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
