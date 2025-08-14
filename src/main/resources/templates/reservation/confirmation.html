@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+         th:replace="~{fragments/layout :: layout}">
+      layout:decorate="~{layouts/main}">
+<head>
+    <title>Confirmation de réservation</title>
+</head>
+<body>
+<div layout:fragment="content" class="max-w-3xl mx-auto px-6 py-10">
+
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">
+        Réservation n°<span th:text="${reservation.id}">123</span> confirmée&nbsp;!
+    </h1>
+
+    <!-- ... entête date/status ... -->
+
+    <h2 class="text-2xl font-semibold text-gray-700 mb-4">Détails des places réservées</h2>
+
+    <div th:if="${reservation.items == null or #lists.isEmpty(reservation.items)}"
+         class="italic text-gray-500 mb-6">
+        Aucun billet n’a été ajouté à cette réservation.
+    </div>
+
+    <table th:if="${reservation.items != null and !#lists.isEmpty(reservation.items)}"
+           class="w-full table-auto border-collapse mb-6">
+        <thead>
+        <tr class="bg-gray-100">
+            <th class="px-4 py-2 text-left">Représentation</th>
+            <th class="px-4 py-2 text-left">Tarif unitaire</th>
+            <th class="px-4 py-2 text-left">Quantité</th>
+            <th class="px-4 py-2 text-left">Sous-total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${reservation.items}">
+            <td class="border px-4 py-2"
+                th:text="${#temporals.format(item.representation.scheduledAt, 'dd/MM/yyyy HH:mm')}">12/05/2025 20:30
+            </td>
+            <td class="border px-4 py-2" th:text="${item.price.price + ' €'}">15.00 €</td>
+            <td class="border px-4 py-2" th:text="${item.quantity}">2</td>
+            <td class="border px-4 py-2"
+                th:text="${item.price.price * item.quantity + ' €'}">30.00 €
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr class="font-semibold">
+            <td colspan="3" class="text-right px-4 py-2">Total :</td>
+            <td class="border px-4 py-2" th:text="${reservation.total + ' €'}">0.00 €</td>
+        </tr>
+        </tfoot>
+    </table>
+
+    <a th:href="@{/shows}"
+       class="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        ← Retour aux spectacles
+    </a>
+</div>
+</body>
+</html>

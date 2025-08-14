@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+  <meta charset="UTF-8">
+  <title>Accueil - Système de Réservation</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+<div layout:fragment="content">
+  <!-- Section Hero -->
+  <section class="bg-cover bg-center h-96 rounded-lg" style="background-image: url('/images/images/spectacle-salle.png');">
+    <div class="bg-gray-900 bg-opacity-50 h-full flex flex-col justify-center items-center">
+      <h1 class="text-white text-4xl font-bold mb-4">L'art théâtral à son apogée</h1>
+      <p class="text-gray-300 text-lg mb-6">Découvrez des performances exceptionnelles et vivez des émotions uniques</p>
+      <a th:href="@{/shows}"
+         class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-medium">
+        Programme
+      </a>
+    </div>
+  </section>
+
+  <!-- Section Fonctionnalités -->
+  <section class="mt-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Réservation en ligne -->
+      <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+        <div class="mb-4">
+          <i class="fas fa-ticket-alt text-blue-500 text-4xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Réservation en ligne</h3>
+        <p class="text-gray-600">
+          Accédez rapidement à vos réservations et achetez vos billets en quelques clics.
+        </p>
+      </div>
+      <!-- Évènements à venir -->
+      <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+        <div class="mb-4">
+          <i class="fas fa-calendar-alt text-blue-500 text-4xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Au Plateau Théâtral, nous nous engageons à présenter des œuvres qui explorent les différentes facettes de l'expérience humaine</h3>
+        <p class="text-gray-600">
+          Découvrez notre histoire.
+        </p>
+      </div>
+      <!-- Communauté -->
+      <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+        <div class="mb-4">
+          <i class="fas fa-users text-blue-500 text-4xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Communauté</h3>
+        <p class="text-gray-600">
+          L'objectif théâtral est multidimensionnel, visant à divertir, éduquer, émouvoir et inspirer.
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

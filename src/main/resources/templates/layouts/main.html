@@ -1,108 +1,38 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="utf-8">
-    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Projet Réservations</title>
-    <th:block layout:fragment="css">
-    </th:block>
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .page-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        main {
-            flex: 1;
-            padding: 20px;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            font-size: 14px;
-            box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.15);
-            width: 100%;
-        }
-
-        /* Navbar */
-        .navbar {
-            background-color: #2c3e50;
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-
-
-        .navbar-header {
-            flex: 1;
-        }
-
-        .navbar-brand {
-            font-size: 28px;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        nav .nav {
-            list-style: none;
-            display: flex;
-            gap: 30px;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav li a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            padding: 8px 14px;
-            border-radius: 6px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .nav li a:hover {
-            background-color: #1f2e3c;
-            color: #1abc9c;
-        }
-
-        .nav .active a {
-            background-color: #1abc9c;
-            color: white;
-            font-weight: bold;
-        }
-
-    </style>
-
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">ICC Réservation</title>
+    <!-- Inclusion de Tailwind CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <th:block layout:fragment="css"></th:block>
 </head>
-<body>
-<div class="page-container">
-    <header th:replace="fragments/header :: header"></header>
+<body class="bg-gray-100">
+<!-- Insertion du header -->
+<div th:replace="fragments/header :: header"></div>
 
-    <main layout:fragment="content">
-        <!-- contenu injecté ici -->
-    </main>
+<!-- Contenu principal : on ajoute un padding-top pour laisser la place à la navbar fixe -->
+<main class="pt-20 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Zone de notifications -->
+    <div id="notification">
+        <div th:if="${successMessage}"
+             class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            <p th:text="${successMessage}"></p>
+        </div>
+        <div th:if="${errorMessage}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <p th:text="${errorMessage}"></p>
+        </div>
+    </div>
+    <!-- Contenu spécifique à la page -->
+    <div layout:fragment="content">
+        <!-- Le contenu sera injecté ici -->
+    </div>
+</main>
 
-    <footer th:replace="fragments/footer :: footer"></footer>
-</div>
+<!-- Insertion du footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<th:block layout:fragment="scripts"></th:block>
 </body>
-
 </html>

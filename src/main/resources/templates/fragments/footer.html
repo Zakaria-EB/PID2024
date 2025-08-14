@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <title>Footer fragment</title>
+    <meta charset="UTF-8">
+    <title>Footer Fragment</title>
 </head>
 <body>
-<!-- Footer -->
-<footer th:fragment="footer">
-    &copy; 2025 – EPFC / ICC – Projet Réservations
+<footer th:fragment="footer" class="bg-gray-800 text-gray-300 py-4">
+    <div class="max-w-7xl mx-auto px-4 text-center"> &copy; 2025 – EPFC / ICC – Projet Réservations
+        <p>
+            <a href="/rss.xml" target="_blank" class="text-blue-500 hover:underline">
+                📡 Flux RSS (spectacles)
+            </a>
+        </p>
+    </div>
+
 </footer>
 </body>
 </html>
-

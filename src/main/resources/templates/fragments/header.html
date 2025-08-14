@@ -1,49 +1,65 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>Header Fragment</title>
 </head>
 <body>
-<header class="navbar" th:fragment="header">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#" th:href="@{/}">Réservations</a>
-        </div>
-        <nav>
-            <ul class="nav">
-                <li th:classappend="${module == 'artists' ? 'active' : ''}">
-                    <a th:href="@{/artists}">Artists</a>
-                </li>
-                <li th:classappend="${module == 'shows' ? 'active' : ''}">
-                    <a th:href="@{/shows}">Shows</a>
-                </li>
-                <li th:classappend="${module == 'representations' ? 'active' : ''}">
-                    <a th:href="@{/representations}">Representations</a>
-                </li>
+<header th:fragment="header" class="bg-gray-800 fixed top-0 w-full z-50 shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
 
-                <!-- Si utilisateur NON connecté -->
-                <li sec:authorize="isAnonymous()">
-                    <a class="btn btn-outline-light btn-sm" th:href="@{/login}">Se connecter</a>
-                </li>
-                <li sec:authorize="isAnonymous()">
-                    <a class="btn btn-outline-light btn-sm ms-2" th:href="@{/register}">S’inscrire</a>
-                </li>
+            <!-- Logo + Navigation -->
+            <div class="flex items-center">
+                <a th:href="@{/}" class="text-white font-bold text-xl hover:text-blue-300 transition">
+                    Réservation
+                </a>
 
-                <!-- Si utilisateur connecté -->
-                <li sec:authorize="isAuthenticated()">
-                <li th:classappend="${module == 'user' ? 'active' : ''}">
-<!--                    <a href="#" th:href="@{/user}">User</a>-->
-                    <a th:href="@{/users/1/edit}">Modifier le profil</a>
-                </li>
-                <li class="nav-item">
-                    <form th:action="@{/logout}" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-outline-light btn-sm ms-2">
-                            <li class="fas fa-sign-out-alt me-1"></i> Se déconnecter
-                        </button>
+                <nav class="ml-8 space-x-4 flex items-center">
+                    <a th:href="@{/shows}"
+                       class="text-sm px-3 py-2 rounded-md hover:bg-gray-700 text-gray-300 hover:text-white">
+                        Spectacles
+                    </a>
+                    <a th:href="@{/infos-pratiques}"
+                       class="text-sm px-3 py-2 rounded-md hover:bg-gray-700 text-gray-300 hover:text-white">
+                        Infos pratiques
+                    </a>
+
+                    <a th:href="@{/cart/view}" sec:authorize="isAuthenticated()"
+                       class="text-sm px-3 py-2 rounded-md hover:bg-gray-700 text-gray-300 hover:text-white">
+                        🛒 Mon panier
+                    </a>
+
+                    <a th:href="@{/my-reservations}" sec:authorize="isAuthenticated()"
+                       class="text-sm px-3 py-2 rounded-md hover:bg-gray-700 text-gray-300 hover:text-white">
+                        📄 Mes réservations
+                    </a>
+
+                    <a th:href="@{/templates/admin/shows}" sec:authorize="hasRole('ADMIN')"
+                       class="text-sm px-3 py-2 rounded-md hover:bg-gray-700 text-yellow-300 hover:text-white">
+                        Gestion des spectacles
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Zone utilisateur -->
+            <div class="flex items-center space-x-4">
+                <div sec:authorize="!isAuthenticated()" class="text-gray-300 text-sm">
+                    <a th:href="@{/login}" class="hover:text-blue-400">Se connecter</a>
+                    <span class="mx-1">|</span>
+                    <a th:href="@{/registration}" class="hover:text-blue-400">S'inscrire</a>
+                </div>
+
+                <div sec:authorize="isAuthenticated()" class="text-gray-300 text-sm flex items-center gap-2">
+                    <span>Bonjour,</span>
+                    <span sec:authentication="principal.username" class="font-semibold"></span>
+                    <form th:action="@{/logout}" method="post" class="ml-2">
+                        <button type="submit" class="text-blue-400 hover:text-blue-500 text-sm">Se déconnecter</button>
                     </form>
-                </li>
-            </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </header>
 </body>

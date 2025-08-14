@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+    <title>Liste des types</title>
+</head>
+<body>
+<div class="container">
+    <div layout:fragment="content">
+        <h1 th:text="${title}">Liste des types</h1>
+
+        <ul th:unless="${#lists.isEmpty(types)}">
+            <li th:each="type : ${types}">
+                <span th:text="${type.type}">Acteur</span>
+                <a th:href="@{/types/{id}(id=${type.id})}">View</a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

@@ -1,16 +1,15 @@
 package com.reservations.reservations.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@NoArgsConstructor(force = true, access = AccessLevel.PUBLIC)
+@NoArgsConstructor
 @Entity
 @Table(name = "artists")
 public class Artist {
@@ -18,12 +17,29 @@ public class Artist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "The firstname must not be empty.")
+    @Size(min = 2, max = 60, message = "The firstname must be between 2 and 60 characters long.")
     private String firstname;
+
+    @NotBlank(message = "The lastname must not be empty.")
+    @Size(min = 2, max = 60, message = "The firstname must be between 2 and 60 characters long.")
     private String lastname;
 
     @ManyToMany(mappedBy = "artists")
-    @JsonIgnore
     private List<Type> types = new ArrayList<>();
+
+    // Problème avec lombok !
+    public Long getId() {
+        return id;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
 
     public List<Type> getTypes() {
         return types;
@@ -34,6 +50,7 @@ public class Artist {
             this.types.add(type);
             type.addArtist(this);
         }
+
         return this;
     }
 
@@ -42,6 +59,12 @@ public class Artist {
             this.types.remove(type);
             type.getArtists().remove(this);
         }
+
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return firstname + " " + lastname;
     }
 }

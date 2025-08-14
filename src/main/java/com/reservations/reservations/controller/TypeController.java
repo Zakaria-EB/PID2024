@@ -33,7 +33,7 @@ public class TypeController {
         model.addAttribute("type", type);
         model.addAttribute("title", "Fiche d'un type");
 
-        return "type/show";
+        return "type/show";  // Correction du nom de la vue
     }
 
 }

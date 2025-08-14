@@ -1,46 +1,38 @@
 package com.reservations.reservations.service;
 
-import com.reservations.reservations.model.Show;
 import com.reservations.reservations.model.Tag;
-import com.reservations.reservations.repository.ShowRepository;
 import com.reservations.reservations.repository.TagRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class TagService {
+    @Autowired
+    private TagRepository repository;
 
-    private final TagRepository tagRepository;
-    private final ShowRepository showRepository;
-
-    public TagService(TagRepository tagRepository, ShowRepository showRepository) {
-        this.tagRepository = tagRepository;
-        this.showRepository = showRepository;
+    public List<Tag> findAll() {
+        return StreamSupport.stream(repository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
-    @Transactional
-    public void addTagToShow(String tagLabel, Show show) {
-        // 🔍 Recherche du tag existant
-        Optional<Tag> optionalTag = tagRepository.findByTag(tagLabel.trim());
+    public Optional<Tag> find(Long id) {
+        return repository.findById(id);
+    }
 
-        Tag tag;
+    public Optional<Tag> findByTag(String tagLabel) {
+        return repository.findByTag(tagLabel);
+    }
 
-        if (optionalTag.isPresent()) {
-            tag = optionalTag.get();
-        } else {
-            // ✅ Création du tag s’il n’existe pas
-            tag = new Tag();
-            tag.setTag(tagLabel.trim());
-            tag = tagRepository.save(tag);
-        }
+    public void save(Tag tag) {
+        repository.save(tag);
+    }
 
-        // 🔗 Ajout au show s’il n’est pas déjà présent
-        if (!show.getTags().contains(tag)) {
-            show.getTags().add(tag);
-            showRepository.save(show); // mise à jour côté "owning side"
-        }
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 }
-

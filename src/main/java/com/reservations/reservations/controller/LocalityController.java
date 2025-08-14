@@ -1,7 +1,5 @@
 package com.reservations.reservations.controller;
 
-import java.util.List;
-
 import com.reservations.reservations.model.Locality;
 import com.reservations.reservations.service.LocalityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
 
 @Controller
 public class LocalityController {
