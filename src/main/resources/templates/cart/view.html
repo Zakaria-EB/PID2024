@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{layouts/main}">
+<head>
+  <title>Mon panier</title>
+</head>
+<body>
+<div layout:fragment="content" class="max-w-4xl mx-auto py-10">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">🛒 Mon panier</h1>
+
+  <div th:if="${#lists.isEmpty(items)}" class="text-gray-500 italic">
+    Votre panier est vide.
+  </div>
+
+  <div th:unless="${#lists.isEmpty(items)}">
+    <table class="w-full border-collapse mb-6">
+      <thead>
+      <tr class="bg-gray-100 text-left">
+        <th class="px-4 py-2">Date</th>
+        <th class="px-4 py-2">Prix</th>
+        <th class="px-4 py-2">Quantité</th>
+        <th class="px-4 py-2">Total</th>
+        <th class="px-4 py-2"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="item, iStat : ${items}" class="border-t">
+        <td class="px-4 py-2" th:text="${item.label}">05/06/2025 20:00</td>
+        <td class="px-4 py-2" th:text="${item.unitPrice + ' €'}">15 €</td>
+        <td class="px-4 py-2" th:text="${item.quantity}">2</td>
+        <td class="px-4 py-2" th:text="${item.unitPrice * item.quantity + ' €'}">30 €</td>
+        <td class="px-4 py-2">
+          <form method="post" th:action="@{'/cart/delete/' + ${iStat.index}}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit" class="text-red-600 hover:underline">Supprimer</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <tr class="font-semibold">
+        <td colspan="3" class="text-right px-4 py-2">Total :</td>
+        <td class="px-4 py-2" th:text="${total + ' €'}">0 €</td>
+        <td></td>
+      </tr>
+      </tfoot>
+    </table>
+
+    <form method="post" action="/cart/checkout">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+        ✅ Valider et payer
+      </button>
+    </form>
+  </div>
+</div>
+</body>
+</html>

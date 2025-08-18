@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Administration – Spectacles</title>
+</head>
+<body>
+<div layout:fragment="content" class="max-w-6xl mx-auto">
+
+    <!-- Messages flash -->
+    <div th:if="${success}" class="mb-4 p-3 rounded bg-green-50 text-green-800 border border-green-200"
+         th:text="${success}">Succès</div>
+    <div th:if="${error}" class="mb-4 p-3 rounded bg-red-50 text-red-800 border border-red-200"
+         th:text="${error}">Erreur</div>
+
+    <!-- Barre d’actions -->
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold">Gestion des spectacles</h1>
+
+        <div class="flex items-center gap-2">
+            <!-- Export Excel : une feuille par table -->
+            <a th:href="@{/admin/export-db.xlsx}"
+               class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Exporter (Excel)
+            </a>
+
+            <!-- Import Excel : par défaut fusion (upsert), FK ON -->
+            <form th:action="@{/admin/import-db.xlsx}"
+                  method="post"
+                  enctype="multipart/form-data"
+                  class="flex items-center gap-2">
+                <input type="file" name="file" accept=".xlsx" required
+                       class="block w-60 text-sm text-gray-700
+                              file:mr-4 file:py-2 file:px-4
+                              file:rounded file:border-0
+                              file:text-sm file:font-semibold
+                              file:bg-gray-100 file:text-gray-700
+                              hover:file:bg-gray-200"/>
+                <select name="mode" class="border rounded px-2 py-1 text-sm">
+                    <option value="upsert" selected>Fusionner (upsert)</option>
+                    <option value="replace_all">Remplacer tout</option>
+                </select>
+                <!-- CSRF (Spring Security) -->
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit"
+                        class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
+                    Importer (Excel)
+                </button>
+            </form>
+
+            <!-- Nouveau spectacle -->
+            <a th:href="@{/admin/shows/new}"
+               class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                + Nouveau spectacle
+            </a>
+        </div>
+    </div>
+
+    <!-- Tableau des spectacles -->
+    <table class="min-w-full bg-white shadow rounded overflow-hidden">
+        <thead class="bg-gray-100">
+        <tr>
+            <th class="px-4 py-2 text-left">ID</th>
+            <th class="px-4 py-2 text-left">Titre</th>
+            <th class="px-4 py-2 text-left">Lieu</th>
+            <th class="px-4 py-2 text-left">Réservable</th>
+            <th class="px-4 py-2 text-left">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="show : ${shows}" class="border-t hover:bg-gray-50">
+            <!-- ID -->
+            <td class="px-4 py-2" th:text="${show.id}">1</td>
+
+            <!-- Titre -->
+            <td class="px-4 py-2" th:text="${show.title}">Titre du spectacle</td>
+
+            <!-- Lieu (avec garde null) -->
+            <td class="px-4 py-2"
+                th:text="${show.location != null ? show.location.designation : '—'}">
+                Lieu
+            </td>
+
+            <!-- Réservable -->
+            <td class="px-4 py-2">
+                <span th:if="${show.bookable}"
+                      class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Oui</span>
+                <span th:unless="${show.bookable}"
+                      class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">Non</span>
+            </td>
+
+            <!-- Actions -->
+            <td class="px-4 py-2 space-x-2">
+                <a th:href="@{/admin/shows/{id}/edit(id=${show.id})}"
+                   class="text-blue-600 hover:underline">Modifier</a>
+
+                <form th:action="@{/admin/shows/{id}/delete(id=${show.id})}"
+                      method="post"
+                      class="inline"
+                      onsubmit="return confirm('Confirmer la suppression ?');">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="text-red-600 hover:underline">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

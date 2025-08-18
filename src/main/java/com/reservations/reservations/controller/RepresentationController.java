@@ -1,5 +1,7 @@
 package com.reservations.reservations.controller;
 
+
+
 import com.reservations.reservations.model.Representation;
 import com.reservations.reservations.service.RepresentationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-
 
 @Controller
 public class RepresentationController {
@@ -31,8 +32,8 @@ public class RepresentationController {
         Representation representation = service.get(id);
 
         model.addAttribute("representation", representation);
-        model.addAttribute("date", representation.getWhen().toLocalDate());
-        model.addAttribute("heure", representation.getWhen().toLocalTime());
+        model.addAttribute("date", representation.getScheduledAt().toLocalDate());
+        model.addAttribute("heure", representation.getScheduledAt().toLocalTime());
         model.addAttribute("title", "Fiche d'une representation");
 
         return "representation/show";

@@ -27,7 +27,7 @@ public class ArtistType {
             inverseJoinColumns = @JoinColumn(name = "show_id"))
     private List<Show> shows = new ArrayList<>();
 
-    protected ArtistType() { }
+    public ArtistType() { }
 
     public ArtistType(Artist artist, Type type, List<Show> shows) {
         this.artist = artist;

@@ -1,6 +1,5 @@
 package com.reservations.reservations.config;
 
-import com.reservations.reservations.model.Role;
 import com.reservations.reservations.model.User;
 import com.reservations.reservations.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +20,21 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByLogin(username);
+        final User user = userRepository.findByLogin(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + username + " not found");
+        }
 
         return new org.springframework.security.core.userdetails.User(
-                user.getLogin(), user.getPassword(),
-                getGrantedAuthorities(user.getRoles()));
+                username,
+                user.getPassword(),
+                getGrantedAuthorities(user.getRole().toString()));
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(List<Role> roles) {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole()));
-        }
+    private List<GrantedAuthority> getGrantedAuthorities(String role) {
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
 
         return authorities;
     }
