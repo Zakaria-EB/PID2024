@@ -154,4 +154,9 @@ public class User {
     public boolean hasRole(UserRole userRole) {
         return true;
     }
+
+    public String getUsername() {
+        return this.login;
+    }
+
 }

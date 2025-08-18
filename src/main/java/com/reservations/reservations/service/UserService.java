@@ -2,6 +2,7 @@ package com.reservations.reservations.service;
 
 import com.reservations.reservations.model.User;
 import com.reservations.reservations.repository.UserRepository;
+import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,4 +61,10 @@ public class UserService {
         repository.deleteById(indice);
     }
 
+    public User getUserByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 }

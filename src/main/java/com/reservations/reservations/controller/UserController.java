@@ -6,10 +6,14 @@ import com.reservations.reservations.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 @Controller
 public class UserController {
 
@@ -48,10 +52,44 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public String showUser(@PathVariable String id, Model model) {
+    public String showUser(@PathVariable Long id, Model model) {
         User user = service.getUser(id);
         model.addAttribute("user", user);
         return "user/show";
     }
+    @GetMapping("/profil/edit")
+    public String editSelf(java.security.Principal principal) {
+        if (principal == null) {
+            return "redirect:/login?loginRequired=true";
+        }
+        User me = service.getUserByLogin(principal.getName());
 
+        return "redirect:/users/" + me.getId() + "/edit";
+    }
+    @PostMapping("/users/{id}/edit")
+    public String updateUser(@PathVariable Long id,
+                             @ModelAttribute("user") User form,
+                             RedirectAttributes ra) {
+
+        User user = service.getUser(id);
+
+        user.setLogin(form.getLogin());
+        user.setFirstname(form.getFirstname());
+        user.setLastname(form.getLastname());
+        user.setEmail(form.getEmail());
+        user.setLangue(form.getLangue());
+
+        service.save(user);
+        User updatedUser = service.getUser(id);
+
+        UsernamePasswordAuthenticationToken auth =
+                new UsernamePasswordAuthenticationToken(
+                        updatedUser,
+                        updatedUser.getPassword()
+                );
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+        ra.addFlashAttribute("success", "Profil mis à jour !");
+        return "redirect:/users/" + id + "/edit";
+    }
 }
