@@ -2,6 +2,7 @@ package com.reservations.reservations.service;
 
 import com.reservations.reservations.model.User;
 import com.reservations.reservations.repository.UserRepository;
+import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,4 +41,30 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    @Autowired
+    private UserRepository repository;
+
+
+    public User getUser(String id) {
+        int indice = Integer.parseInt(id);
+
+        return repository.findById(indice);
+    }
+
+    public void updateUser(String id, User user) {
+        repository.save(user);
+    }
+
+    public void deleteUser(String id) {
+        Long indice = (long) Integer.parseInt(id);
+
+        repository.deleteById(indice);
+    }
+
+    public User getUserByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 }

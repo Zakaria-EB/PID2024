@@ -3,7 +3,7 @@ INSERT INTO `shows` (`id`, `slug`, `title`, `description`, `poster_url`, `bookab
 VALUES (1, 'ayiti', 'Ayiti',
         'Un homme est bloqué à l’aéroport.\n Questionné par les douaniers, il doit alors justifier son identité, et surtout prouver qu\'il est haïtien – qu\'est-ce qu\'être haïtien ?',
         'ayiti.jpg', 1, '2020-04-21 19:08:44.583000', NULL, 1),
-       (2, 'cible-mouvante', 'Cible mouvante',
+       (2, 'cible', 'Cible',
         'Dans ce « thriller d’anticipation », des adultes semblent alimenter et véhiculer une crainte féroce envers les enfants âgés entre 10 et 12 ans.',
         'cible.jpg', 1, '2020-04-21 19:08:53.156000', NULL, 2),
        (3, 'ceci-nest-pas-un-chanteur-belge', 'Ceci n\'est pas un chanteur belge',

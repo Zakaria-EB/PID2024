@@ -50,14 +50,22 @@
                     <span class="mx-1">|</span>
                     <a th:href="@{/registration}" class="hover:text-blue-400">S'inscrire</a>
                 </div>
-
                 <div sec:authorize="isAuthenticated()" class="text-gray-300 text-sm flex items-center gap-2">
                     <span>Bonjour,</span>
-                    <span sec:authentication="principal.username" class="font-semibold"></span>
+                    <a th:href="@{/profil/edit}" class="font-semibold hover:text-blue-400 transition">
+                        <span sec:authentication="principal.username"></span>
+                    </a>
                     <form th:action="@{/logout}" method="post" class="ml-2">
                         <button type="submit" class="text-blue-400 hover:text-blue-500 text-sm">Se déconnecter</button>
                     </form>
                 </div>
+<!--                <div sec:authorize="isAuthenticated()" class="text-gray-300 text-sm flex items-center gap-2">-->
+<!--                    <span>Bonjour,</span>-->
+<!--                    <span sec:authentication="principal.username" class="font-semibold"></span>-->
+<!--                    <form th:action="@{/logout}" method="post" class="ml-2">-->
+<!--                        <button type="submit" class="text-blue-400 hover:text-blue-500 text-sm">Se déconnecter</button>-->
+<!--                    </form>-->
+<!--                </div>-->
             </div>
         </div>
     </div>
