@@ -22,26 +22,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SpringSecurityConfig {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8081")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowCredentials( true )
-                        .allowedHeaders( "*" );
-
-            }
-        };
-    }
-
-
-
-
-
     @Bean
     public SecurityFilterChain configure(final HttpSecurity http) throws Exception {
         System.out.println("Config de la sécurité en cours ...");
@@ -54,9 +34,8 @@ public class SpringSecurityConfig {
                     auth.requestMatchers("/api/localities/**").authenticated();
                     auth.requestMatchers("/api/artists/**").permitAll();
                     auth.requestMatchers("/api/auth/check").permitAll();
-                    auth.requestMatchers("/api/login").permitAll();
+                    auth.requestMatchers("/api/login").permitAll();  // Ajout de /api/login
                     auth.requestMatchers("/api/logout").permitAll();
-                    auth.requestMatchers("/profil/**").authenticated();
 
                     auth.requestMatchers( "/api/tags" ).permitAll();
                     auth.requestMatchers( "/api/tags/**" ).hasRole("ADMIN");

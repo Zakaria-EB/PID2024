@@ -36,7 +36,7 @@
                         📄 Mes réservations
                     </a>
 
-                    <a th:href="@{/templates/admin/shows}" sec:authorize="hasRole('ADMIN')"
+                    <a th:href="@{/admin}" sec:authorize="hasRole('ROLE_ADMIN')"
                        class="text-sm px-3 py-2 rounded-md hover:bg-gray-700 text-yellow-300 hover:text-white">
                         Gestion des spectacles
                     </a>

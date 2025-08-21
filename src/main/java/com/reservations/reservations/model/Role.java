@@ -53,7 +53,7 @@ public class Role {
     public Role addUser(User user) {
         if (!this.users.contains(user)) {
             this.users.add(user);
-            user.addRole(this);
+            user.addRole(String.valueOf(this));
         }
 
         return this;
