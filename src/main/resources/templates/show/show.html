@@ -56,13 +56,13 @@
                         Non réservable
                     </span>
 
-                    <!-- Prix -->
-                    <span th:if="${show.prices != null and !#lists.isEmpty(show.prices)}"
+                    <!-- Prix (min cohérent) -->
+                    <span th:if="${minPrice != null}"
                           class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
-                          th:text="${show.prices[0].price + ' €'}">
+                          th:text="${#numbers.formatDecimal(minPrice, 1, 'COMMA', 2, 'POINT')} + ' €'">
                         9.99 €
                     </span>
-                    <span th:if="${show.prices == null or #lists.isEmpty(show.prices)}"
+                    <span th:if="${minPrice == null}"
                           class="inline-block italic text-gray-400 text-sm">
                         Prix non défini
                     </span>
@@ -78,9 +78,12 @@
             </div>
         </div>
 
-        <!-- Représentations -->
+        <!-- Représentations (SANS barre de filtres/tri) -->
         <section class="mb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Représentations</h2>
+            <div class="flex items-end justify-between gap-4 mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Représentations</h2>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 <div th:each="rep : ${show.representations}"
                      th:classappend="${rep.availableSeats > 0} ? 'bg-green-50' : 'bg-gray-200 text-gray-500'"
@@ -104,12 +107,22 @@
 
         <!-- Collaborateurs -->
         <section class="mb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Collaborateurs</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 text-sm">
+            <div class="flex items-end justify-between gap-4 mb-2">
+                <h2 class="text-2xl font-bold text-gray-800">Collaborateurs</h2>
+                <div class="flex items-center gap-2 text-sm">
+                    <label for="collabSort" class="font-semibold">Trier les noms :</label>
+                    <select id="collabSort" class="border rounded px-2 py-1">
+                        <option value="asc">A → Z</option>
+                        <option value="desc">Z → A</option>
+                    </select>
+                </div>
+            </div>
+            <div id="collabRoot" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 text-sm">
                 <div th:if="${collaborateurs['auteur']}">
                     <h3 class="font-semibold mb-1">Auteur(s)</h3>
                     <ul class="list-disc list-inside">
                         <li th:each="a : ${collaborateurs['auteur']}"
+                            class="collab-item"
                             th:text="${a.firstname + ' ' + a.lastname}">
                             Nom
                         </li>
@@ -119,6 +132,7 @@
                     <h3 class="font-semibold mb-1">Metteur(s) en scène</h3>
                     <ul class="list-disc list-inside">
                         <li th:each="s : ${collaborateurs['scénographe']}"
+                            class="collab-item"
                             th:text="${s.firstname + ' ' + s.lastname}">
                             Nom
                         </li>
@@ -128,6 +142,7 @@
                     <h3 class="font-semibold mb-1">Distribution</h3>
                     <ul class="list-disc list-inside">
                         <li th:each="c : ${collaborateurs['comédien']}"
+                            class="collab-item"
                             th:text="${c.firstname + ' ' + c.lastname}">
                             Nom
                         </li>
@@ -151,7 +166,6 @@
                 Aucun mot-clé.
             </p>
 
-            <!-- Lien “Voir sans ce mot-clé” -->
             <div class="mt-4">
                 <p class="italic text-sm text-gray-600 mb-2">Voir les spectacles sans ce mot-clé :</p>
                 <div class="flex flex-wrap gap-2">
@@ -163,7 +177,6 @@
                 </div>
             </div>
 
-            <!-- Formulaire d’ajout (admin only) -->
             <div sec:authorize="hasRole('ADMIN')" class="mt-6">
                 <form th:action="@{/shows/{id}/tags(id=${show.id})}"
                       method="post"
@@ -183,8 +196,9 @@
                 </form>
             </div>
         </section>
+
+        <!-- Commentaires -->
         <section>
-            <!-- Commentaires -->
             <div class="mb-12">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Commentaires</h2>
 
@@ -218,7 +232,7 @@
                 </div>
 
                 <!-- Formulaire de commentaire -->
-                <div th:if="${#authorization.expression('isAuthenticated()')}" class="mt-8">
+                <div th:if="${#authorization.expression('isAuthenticated())'}" class="mt-8">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">Laisser un commentaire</h3>
                     <form th:action="@{/reviews/submit}" method="post" class="space-y-4 bg-gray-50 p-6 rounded shadow border border-gray-200">
                         <input type="hidden" name="showId" th:value="${show.id}" />
@@ -241,11 +255,12 @@
                 </div>
 
                 <!-- Message pour les visiteurs -->
-                <div th:unless="${#authorization.expression('isAuthenticated()')}" class="mt-6 text-gray-600">
+                <div th:unless="${#authorization.expression('isAuthenticated())'}" class="mt-6 text-gray-600">
                     🔒 <a th:href="@{/login}" class="text-blue-600 hover:underline">Connectez-vous</a> pour poster un commentaire.
                 </div>
             </div>
         </section>
+
         <!-- Retour -->
         <div class="mt-8">
             <a th:href="@{/shows}"
@@ -256,5 +271,23 @@
 
     </div>
 </div>
+
+<!-- JS minimal pour le tri des collaborateurs uniquement -->
+<script>
+    (function(){
+        const collabSort = document.getElementById('collabSort');
+        if (!collabSort) return;
+        function sortAllCollaborators(direction){
+            document.querySelectorAll('#collabRoot ul').forEach(ul => {
+                const items = Array.from(ul.querySelectorAll('.collab-item'));
+                items.sort((a,b) => a.textContent.trim().localeCompare(b.textContent.trim(), 'fr', {sensitivity:'base'}));
+                if (direction === 'desc') items.reverse();
+                items.forEach(li => ul.appendChild(li));
+            });
+        }
+        collabSort.addEventListener('change', () => sortAllCollaborators(collabSort.value));
+        sortAllCollaborators(collabSort.value);
+    })();
+</script>
 </body>
 </html>
