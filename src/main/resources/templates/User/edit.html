@@ -1,40 +1,93 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout" layout:decorate="~{layouts/main}">
-<head>
-    <meta charset="UTF-8">
-    <title>Modifier profil</title>
-</head>
-<body>
-<div layout:fragment="content">
-    <h1>Modifier le profil</h1>
-    <form th:action="@{/users/{id}/edit(id=${user.id})}" th:object="${user}" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-        <div>
-            <label>Login:</label>
-            <input type="text" th:field="*{login}" required />
-        </div>
-        <div>
-            <label>Prénom:</label>
-            <input type="text" th:field="*{firstname}" required />
-        </div>
-        <div>
-            <label>Nom:</label>
-            <input type="text" th:field="*{lastname}" required />
-        </div>
-        <div>
-            <label>Email:</label>
-            <input type="email" th:field="*{email}" required />
-        </div>
-        <div>
-            <label>Langue:</label>
-            <input type="text" th:field="*{langue}" />
-        </div>
-        <div>
-            <button type="submit">Enregistrer</button>
-            <a th:href="${back}">Annuler</a>
-        </div>
-    </form>
-</div>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.mx/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
 
+<head>
+    <meta charset="UTF-8" />
+    <title>Modifier le profil</title>
+</head>
+
+<body>
+<div layout:fragment="content" class="container mx-auto py-8">
+    <header class="mb-6">
+        <nav class="text-sm text-gray-500 mb-2">
+            <a th:href="@{/}" class="hover:text-blue-500">Accueil</a>
+            <span class="mx-2">/</span>
+            <span>Mon profil</span>
+        </nav>
+        <h1 class="text-2xl font-bold">Modifier mon profil</h1>
+        <p class="text-gray-500 mt-1">
+            Mettez vos informations à jour. <span class="text-amber-600 font-medium">Changer votre login
+      déconnectera vos autres sessions.</span>
+        </p>
+    </header>
+    <div th:if="${success}" class="mb-4 rounded-md bg-green-50 p-4 text-green-700 border border-green-200">
+        <span th:text="${success}">Profil mis à jour.</span>
+    </div>
+    <div th:if="${error}" class="mb-4 rounded-md bg-red-50 p-4 text-red-700 border border-red-200">
+        <span th:text="${error}">Une erreur est survenue.</span>
+    </div>
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <form th:action="@{/users/{id}/edit(id=${user.id})}" th:object="${user}" method="post" class="space-y-5">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Login</label>
+                    <input th:field="*{login}" type="text"
+                           class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                           required />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input th:field="*{email}" type="email"
+                           class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                           required />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                    <input th:field="*{firstname}" type="text"
+                           class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                           required />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                    <input th:field="*{lastname}" type="text"
+                           class="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                           required />
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Langue</label>
+                    <select th:field="*{langue}"
+                            class="w-full rounded-md border border-gray-300 px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <option value="">— Sélectionner —</option>
+                        <option value="fr">Français</option>
+                        <option value="en">English</option>
+                        <option value="nl">Nederlands</option>
+                    </select>
+                </div>
+            </div>
+            <div class="pt-4 flex items-center gap-3">
+                <button type="submit"
+                        class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-white font-medium shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    Enregistrer
+                </button>
+                <a th:href="${back != null} ? ${back} : @{/}"
+                   class="inline-flex items-center rounded-md bg-gray-100 px-4 py-2 text-gray-700 font-medium hover:bg-gray-200">
+                    Annuler
+                </a>
+            </div>
+        </form>
+    </div>
+    <div class="mt-6">
+        <a th:href="@{/}" class="text-blue-500 hover:text-blue-700">Retour à l’accueil</a>
+    </div>
+</div>
 </body>
 </html>
