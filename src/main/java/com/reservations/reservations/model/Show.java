@@ -42,9 +42,11 @@ public class Show {
 
 
     @ManyToMany
-    @JoinTable(name = "show_price",
+    @JoinTable(
+            name = "show_price",
             joinColumns = @JoinColumn(name = "show_id"),
-            inverseJoinColumns = @JoinColumn(name = "price_id"))
+            inverseJoinColumns = @JoinColumn(name = "price_id")
+    )
     private List<Price> prices = new ArrayList<>();
 
     /**
