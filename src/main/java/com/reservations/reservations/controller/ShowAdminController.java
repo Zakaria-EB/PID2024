@@ -82,11 +82,13 @@ public class ShowAdminController {
                          Model model) {
         if (br.hasErrors()) {
             populateFormLists(model);
-            return "admin/shows/form";
+            // FIX: vue correcte
+            return "admin/form";
         }
         Show s = buildShowFromForm(form);
         showService.add(s);
         ra.addFlashAttribute("success", "Spectacle créé !");
+        // FIX: redirection correcte
         return "redirect:/admin";
     }
 
@@ -99,7 +101,8 @@ public class ShowAdminController {
         model.addAttribute("showForm", form);
         model.addAttribute("editingId", id);
         populateFormLists(model);
-        return "admin/shows/form";
+        // FIX: vue correcte
+        return "admin/form";
     }
 
     @PostMapping("/{id}/edit")
@@ -110,20 +113,23 @@ public class ShowAdminController {
                          Model model) {
         if (br.hasErrors()) {
             populateFormLists(model);
-            return "admin/shows/form";
+            // FIX: vue correcte
+            return "admin/form";
         }
         Show s = buildShowFromForm(form);
         s.setId(id);
         showService.update(id.toString(), s);
         ra.addFlashAttribute("success", "Spectacle mis à jour !");
-        return "redirect:/admin/shows";
+        // FIX: redirection correcte
+        return "redirect:/admin";
     }
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes ra) {
         showService.delete(id.toString());
         ra.addFlashAttribute("success", "Spectacle supprimé !");
-        return "redirect:/admin/shows";
+        // FIX: redirection correcte
+        return "redirect:/admin";
     }
 
     private Show buildShowFromForm(ShowForm form) {
@@ -676,4 +682,3 @@ public class ShowAdminController {
         }
     }
 }
-

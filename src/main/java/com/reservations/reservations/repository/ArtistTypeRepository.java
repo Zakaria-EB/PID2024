@@ -2,7 +2,8 @@ package com.reservations.reservations.repository;
 
 import com.reservations.reservations.model.Artist;
 import com.reservations.reservations.model.ArtistType;
-import jakarta.persistence.metamodel.Type;
+
+import com.reservations.reservations.model.Type;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

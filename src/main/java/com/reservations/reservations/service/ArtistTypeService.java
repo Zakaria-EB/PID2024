@@ -34,7 +34,7 @@ public class ArtistTypeService {
         Type type = typeRepository.findById(typeId)
                 .orElseThrow(() -> new IllegalArgumentException("Type d’artiste introuvable : " + typeId));
         return artistTypeRepository
-                .findByArtistAndType(artist, (jakarta.persistence.metamodel.Type) type)
+                .findByArtistAndType(artist, (Type) type)
                 .orElseGet(() -> {
                     ArtistType at = new ArtistType();
                     at.setArtist(artist);

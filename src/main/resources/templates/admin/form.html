@@ -16,11 +16,14 @@
     </h1>
 
     <form th:action="${editingId != null}
-                ? @{'/admin/shows/' + ${editingId} + '/edit'}
-                : @{/admin/shows/new}"
+                ? @{'/admin/' + ${editingId} + '/edit'}
+                : @{/admin/new}"
           th:object="${showForm}"
           method="post"
           class="space-y-8">
+
+        <!-- CSRF -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
         <!-- Bloc 1 : Titre & Description -->
         <div class="grid grid-cols-1 gap-6">
@@ -31,8 +34,7 @@
             </div>
             <div>
                 <label class="block text-gray-700 font-medium mb-1">Description</label>
-                <textarea th:field="*{description}"
-                          rows="4"
+                <textarea th:field="*{description}" rows="4"
                           class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"></textarea>
             </div>
         </div>
@@ -50,7 +52,7 @@
                         class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200">
                     <option th:each="loc : ${locations}"
                             th:value="${loc.id}"
-                            th:text="${loc.designation}"/>
+                            th:text="${loc.designation}"></option>
                 </select>
             </div>
             <div class="flex items-center space-x-2">
@@ -87,7 +89,6 @@
                     <label>Fin validité réduit</label>
                     <input type="date" th:field="*{reducedPriceEndDate}" class="w-full border rounded px-3 py-2"/>
                 </div>
-
             </div>
         </div>
 
@@ -98,35 +99,29 @@
                 <div th:each="rep, iStat : *{representations}"
                      class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end rep-item"
                      th:attr="data-index=${iStat.index}">
-
                     <div>
                         <label class="block text-gray-700 font-medium mb-1">Date &amp; Heure</label>
                         <input type="datetime-local"
                                th:field="*{representations[__${iStat.index}__].scheduledAt}"
                                class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
                     </div>
-
                     <div>
                         <label class="block text-gray-700 font-medium mb-1">Capacité</label>
                         <input type="number"
                                th:field="*{representations[__${iStat.index}__].capacity}"
                                class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
                     </div>
-
                     <div>
                         <label class="block text-gray-700 font-medium mb-1">Lieu de représentation</label>
                         <select th:field="*{representations[__${iStat.index}__].locationId}"
                                 class="w-full border border-gray-300 rounded px-3 py-2 rep-location-select focus:ring focus:ring-blue-200">
                             <option th:each="loc : ${locations}"
                                     th:value="${loc.id}"
-                                    th:text="${loc.designation}"/>
+                                    th:text="${loc.designation}"></option>
                         </select>
                     </div>
-
                     <div class="flex items-center">
-                        <button type="button" class="remove-rep text-red-600 hover:underline">
-                            Supprimer
-                        </button>
+                        <button type="button" class="remove-rep text-red-600 hover:underline">Supprimer</button>
                     </div>
                 </div>
             </div>
@@ -144,7 +139,7 @@
                         class="w-full h-32 border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200">
                     <option th:each="t : ${tags}"
                             th:value="${t.id}"
-                            th:text="${t.tag}"/>
+                            th:text="${t.tag}"></option>
                 </select>
             </div>
             <div>
@@ -157,8 +152,7 @@
                                th:field="*{newTags[__${kStat.index}__]}"
                                placeholder="Entrer un mot-clé"
                                class="flex-1 border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
-                        <button type="button"
-                                class="remove-new-tag text-red-600 hover:underline whitespace-nowrap">
+                        <button type="button" class="remove-new-tag text-red-600 hover:underline whitespace-nowrap">
                             Supprimer
                         </button>
                     </div>
@@ -177,7 +171,6 @@
                 <div th:each="col, jStat : *{collaborators}"
                      class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end collab-item"
                      th:attr="data-index=${jStat.index}">
-                    <!-- Sélecteur artiste + lien ajout -->
                     <div>
                         <label class="block text-gray-700 font-medium mb-1">Artiste</label>
                         <div class="flex items-center space-x-2">
@@ -185,31 +178,26 @@
                                     class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200">
                                 <option th:each="a : ${artists}"
                                         th:value="${a.id}"
-                                        th:text="${a.firstname + ' ' + a.lastname}"/>
+                                        th:text="${a.firstname + ' ' + a.lastname}"></option>
                             </select>
-                            <a th:href="@{/admin/artists/new}"
-                               target="_blank"
+                            <a th:href="@{/admin/artists/new}" target="_blank"
                                class="text-blue-600 text-sm hover:underline whitespace-nowrap"
                                title="Ouvre la page de création d'un nouvel artiste">
                                 + Nouvel artiste
                             </a>
                         </div>
                     </div>
-                    <!-- Sélecteur type -->
                     <div>
                         <label class="block text-gray-700 font-medium mb-1">Type</label>
                         <select th:field="*{collaborators[__${jStat.index}__].typeId}"
                                 class="w-full border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200">
                             <option th:each="t : ${types}"
                                     th:value="${t.id}"
-                                    th:text="${t.type}"/>
+                                    th:text="${t.type}"></option>
                         </select>
                     </div>
-                    <!-- Bouton supprimer -->
                     <div class="flex items-center">
-                        <button type="button" class="remove-collab text-red-600 hover:underline">
-                            Supprimer
-                        </button>
+                        <button type="button" class="remove-collab text-red-600 hover:underline">Supprimer</button>
                     </div>
                 </div>
             </div>
@@ -223,110 +211,25 @@
         <div class="flex justify-end">
             <button type="submit"
                     class="px-8 py-3 bg-green-600 text-white font-semibold rounded shadow hover:bg-green-700">
-                <span th:text="${editingId != null} ? 'Mettre à jour' : 'Créer le spectacle'">
-                  Créer le spectacle
-                </span>
+                <span th:text="${editingId != null} ? 'Mettre à jour' : 'Créer le spectacle'">Créer le spectacle</span>
             </button>
         </div>
     </form>
-
-    <!-- PROTOTYPES CACHÉS -->
-    <div id="rep-prototype" class="hidden">
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end rep-item" data-index="__index__">
-            <div>
-                <label>Date &amp; Heure</label>
-                <input type="datetime-local" name="representations[__index__].scheduledAt"
-                       class="w-full border border-gray-300 rounded px-3 py-2"/>
-            </div>
-            <div>
-                <label>Capacité</label>
-                <input type="number" name="representations[__index__].capacity"
-                       class="w-full border border-gray-300 rounded px-3 py-2"/>
-            </div>
-            <div>
-                <label>Lieu de représentation</label>
-                <select name="representations[__index__].locationId"
-                        class="w-full border border-gray-300 rounded px-3 py-2 rep-location-select">
-                    <option th:each="loc : ${locations}"
-                            th:value="${loc.id}"
-                            th:text="${loc.designation}"/>
-                </select>
-            </div>
-            <div class="flex items-center">
-                <button type="button" class="remove-rep text-red-600 hover:underline">
-                    Supprimer
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="new-tag-prototype" class="hidden">
-        <div class="flex items-center space-x-2 new-tag-item" data-index="__index__">
-            <input type="text"
-                   name="newTags[__index__]"
-                   placeholder="Entrer un mot-clé"
-                   class="flex-1 border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200"/>
-            <button type="button"
-                    class="remove-new-tag text-red-600 hover:underline">
-                Supprimer
-            </button>
-        </div>
-    </div>
-
-    <div id="collab-prototype" class="hidden">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end collab-item" data-index="__index__">
-            <div>
-                <label>Artiste</label>
-                <div class="flex items-center space-x-2">
-                    <select name="collaborators[__index__].artistId"
-                            class="w-full border border-gray-300 rounded px-3 py-2">
-                        <option th:each="a : ${artists}"
-                                th:value="${a.id}"
-                                th:text="${a.firstname + ' ' + a.lastname}"/>
-                    </select>
-                    <a th:href="@{/admin/artists/new}"
-                       target="_blank"
-                       class="text-blue-600 text-sm hover:underline whitespace-nowrap"
-                       title="Ouvre la page de création d'un nouvel artiste">
-                        + Nouvel artiste
-                    </a>
-                </div>
-            </div>
-            <div>
-                <label>Type</label>
-                <select name="collaborators[__index__].typeId"
-                        class="w-full border border-gray-300 rounded px-3 py-2">
-                    <option th:each="t : ${types}"
-                            th:value="${t.id}"
-                            th:text="${t.type}"/>
-                </select>
-            </div>
-            <div class="flex items-center">
-                <button type="button" class="remove-collab text-red-600 hover:underline">
-                    Supprimer
-                </button>
-            </div>
-        </div>
-    </div>
-
 </div>
 
-<!-- SCRIPTS DANS LE FRAGMENT "scripts" -->
+<!-- Scripts (facultatif) -->
 <th:block layout:fragment="scripts">
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const showLoc = document.getElementById('show-location-select');
 
             function syncRepLocations() {
+                if (!showLoc) return;
                 const sel = showLoc.value;
                 document.querySelectorAll('.rep-location-select')
                     .forEach(el => el.value = sel);
             }
 
-            syncRepLocations();
-            showLoc.addEventListener('change', syncRepLocations);
-
-            // handlers communs
             function attachHandlers() {
                 document.querySelectorAll('.remove-rep').forEach(btn => {
                     btn.onclick = () => btn.closest('.rep-item').remove();
@@ -339,34 +242,41 @@
                 });
             }
 
-            // Ajout dynamique
-            document.getElementById('add-rep-btn').addEventListener('click', () => {
+            document.getElementById('add-rep-btn')?.addEventListener('click', () => {
                 const set = document.getElementById('reps-fieldset');
                 const idx = set.querySelectorAll('.rep-item').length;
-                const proto = document.getElementById('rep-prototype').innerHTML.trim();
+                const proto = document.getElementById('rep-prototype')?.innerHTML?.trim();
+                if (!proto) return;
                 set.insertAdjacentHTML('beforeend', proto.replace(/__index__/g, idx));
-                attachHandlers();
-                syncRepLocations();
+                attachHandlers(); syncRepLocations();
             });
-            document.getElementById('add-new-tag-btn').addEventListener('click', () => {
+            document.getElementById('add-new-tag-btn')?.addEventListener('click', () => {
                 const set = document.getElementById('new-tags-fieldset');
                 const idx = set.querySelectorAll('.new-tag-item').length;
-                const proto = document.getElementById('new-tag-prototype').innerHTML.trim();
+                const proto = document.getElementById('new-tag-prototype')?.innerHTML?.trim();
+                if (!proto) return;
                 set.insertAdjacentHTML('beforeend', proto.replace(/__index__/g, idx));
                 attachHandlers();
             });
-            document.getElementById('add-collab-btn').addEventListener('click', () => {
+            document.getElementById('add-collab-btn')?.addEventListener('click', () => {
                 const set = document.getElementById('collab-fieldset');
                 const idx = set.querySelectorAll('.collab-item').length;
-                const proto = document.getElementById('collab-prototype').innerHTML.trim();
+                const proto = document.getElementById('collab-prototype')?.innerHTML?.trim();
+                if (!proto) return;
                 set.insertAdjacentHTML('beforeend', proto.replace(/__index__/g, idx));
                 attachHandlers();
             });
 
-            // initial
             attachHandlers();
+            syncRepLocations();
         });
     </script>
 </th:block>
+
+<!-- Prototypes (si tu les utilises ailleurs) -->
+<div id="rep-prototype" class="hidden"></div>
+<div id="new-tag-prototype" class="hidden"></div>
+<div id="collab-prototype" class="hidden"></div>
+
 </body>
 </html>

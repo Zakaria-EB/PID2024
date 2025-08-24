@@ -139,17 +139,17 @@
 
                     <!-- Lien Détails – propage page + filtres + tri -->
                     <div class="mt-auto pt-3">
-                        <a th:href="@{//shows/{id}(id=${show.id},
-                                               page=${currentPage},
-                                               tag=${param.tag},
-                                               minPrice=${filter_minPrice},
-                                               maxPrice=${filter_maxPrice},
-                                               repMin=${filter_repMin},
-                                               repMax=${filter_repMax},
-                                               sort=${filter_sort})}"
-                           class="inline-block text-blue-600 hover:underline font-medium text-sm">
+                        <a th:href="@{/shows/{id}(id=${show.id},
+                           page=${currentPage},
+                           tag=${param.tag},
+                           minPrice=${filter_minPrice},
+                           maxPrice=${filter_maxPrice},
+                           repMin=${filter_repMin},
+                           repMax=${filter_repMax},
+                           sort=${filter_sort})}">
                             Voir les détails →
                         </a>
+
                     </div>
                 </div>
             </div>
